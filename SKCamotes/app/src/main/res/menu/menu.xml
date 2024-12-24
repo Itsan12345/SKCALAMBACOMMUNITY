@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tab_home"
+        android:icon="@drawable/ic_home"
+        android:title="Home" />
+    <item
+        android:id="@+id/tab_requests"
+        android:icon="@drawable/ic_request"
+        android:title="Requests" />
+    <item
+        android:id="@+id/tab_reservations"
+        android:icon="@drawable/ic_reservation"
+        android:title="Reservations" />
+
+    <item
+        android:id="@+id/tab_emergencies"
+        android:icon="@drawable/ic_emergencies"
+        android:title="Emergencies" />
+
+</menu>

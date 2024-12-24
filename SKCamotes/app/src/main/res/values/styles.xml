@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">#9510D3</item> <!-- Status bar color -->
+        <item name="android:windowLightStatusBar">false</item> <!-- Use dark content if true -->
+    </style>
+
+    <!-- Custom Tab Text Appearance -->
+    <style name="TabTextStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:fontFamily">@font/leaguegothicregular</item>
+        <item name="android:textColor">@color/black</item> <!-- Optional: Set text color -->
+        <item name="android:textSize">20sp</item> <!-- Use 'sp' instead of 'dp' for text size -->
+        <item name="android:textStyle">italic</item> <!-- Apply italic style -->
+    </style>
+</resources>

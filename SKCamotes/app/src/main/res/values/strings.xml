@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">SKCamotes</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <!-- Date options -->
+    <string-array name="date_options">
+        <item>Select Date</item>
+        <item>Today</item>
+        <item>Tomorrow</item>
+        <item>Next Week</item>
+    </string-array>
+
+    <!-- Time options -->
+    <string-array name="time_options">
+        <item>Select Time</item>
+        <item>Morning</item>
+        <item>Afternoon</item>
+        <item>Evening</item>
+    </string-array>
+
+</resources>
