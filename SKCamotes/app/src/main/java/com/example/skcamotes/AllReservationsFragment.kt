@@ -19,8 +19,9 @@ class AllReservationsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Find the container view by its ID
+        // Find the container views by their IDs
         val calambaGymContainer = view.findViewById<View>(R.id.CalambaGymContainer)
+        val thirdFloorContainer = view.findViewById<View>(R.id.ThirdFloorContainer)
 
         // Set up the click listener for Calamba Gym container
         calambaGymContainer.setOnClickListener {
@@ -28,12 +29,19 @@ class AllReservationsFragment : Fragment() {
             val calambaGymShowcaseFragment = CalambaGymShowcaseFragment()
             replaceFragment(calambaGymShowcaseFragment)
         }
+
+        // Set up the click listener for Third Floor container
+        thirdFloorContainer.setOnClickListener {
+            // Replace current fragment with ThirdFloorShowcaseFragment
+            val thirdFloorShowcaseFragment = ThirdFloorShowcaseFragment()
+            replaceFragment(thirdFloorShowcaseFragment)
+        }
     }
 
     private fun replaceFragment(fragment: Fragment) {
         requireActivity().supportFragmentManager.beginTransaction().apply {
-            replace(R.id.wrapper, fragment)  // R.id.wrapper is the container where the fragments are replaced
-            addToBackStack(null)  // Add to back stack to allow going back to the previous fragment
+            replace(R.id.wrapper, fragment) // R.id.wrapper is the container where the fragments are replaced
+            addToBackStack(null) // Add to back stack to allow going back to the previous fragment
             commit()
         }
     }

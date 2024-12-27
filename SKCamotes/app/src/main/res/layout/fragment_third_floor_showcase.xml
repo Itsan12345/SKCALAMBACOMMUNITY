@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <!-- ScrollView Section -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Image Section -->
+            <ImageView
+                android:id="@+id/thirfloor_image"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginBottom="16dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_thirdfloor"
+                android:background="@drawable/rounded_corners" />
+
+            <!-- Title Section -->
+            <TextView
+                android:id="@+id/thirdfloor_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:textStyle="bold"
+                android:text="Third Floor Facility"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/gym_loc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Third Floor, Barangay Hall"
+                android:fontFamily="@font/rem_regular"
+                android:textSize="16sp"
+                android:lineSpacingExtra="4dp"
+                android:textColor="#555555"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:drawableLeft="@drawable/ic_locations" />
+
+            <TextView
+                android:id="@+id/gym_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/rem_regular"
+                android:text="The Third Floor Facility is a multi-purpose venue designed to accommodate a variety of events, including meetings, seminars, workshops, and small social gatherings. The space is air-conditioned for comfort and equipped with modern amenities such as audio-visual equipment, including a projector, microphone, and sound system, as well as reliable Wi-Fi for seamless connectivity. Reservations are accepted on a first-come, first-served basis, so early booking is recommended to secure your preferred date and time."
+                android:textSize="13sp"
+                android:lineSpacingExtra="4dp"
+                android:textColor="#555555"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="10dp"
+                android:layout_margin="10dp" />
+
+            <!-- Price Section -->
+            <TextView
+                android:id="@+id/thirdfloor_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price: ₱300/hr"
+                android:textSize="18sp"
+                android:textColor="#FF5722"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="10dp"
+                android:layout_margin="10dp" />
+
+            <!-- Location Label -->
+            <TextView
+                android:id="@+id/thirdfloor_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LOCATION"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:fontFamily="@font/montserrat_regular"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="10dp"
+                android:layout_margin="10dp" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/rounded_corners"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="100dp">
+
+                <!-- MapView Section -->
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/thirdfloor_map_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Floating Container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="@drawable/rounded_corners_shadow">
+
+        <CheckBox
+            android:id="@+id/heart_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:button="@drawable/selector_heart"
+
+            android:contentDescription="Favorite" />
+
+        <Button
+            android:id="@+id/book_now_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="BOOK NOW"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_background" />
+    </LinearLayout>
+
+</FrameLayout>
