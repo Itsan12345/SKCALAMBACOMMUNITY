@@ -1,62 +1,81 @@
 package com.example.skcamotes
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class SchoolSuppliesFragment : Fragment() {
     private var selectedDrawable: Int? = null
-    private var selectedContainer: View? = null
+    private var selectedItemName: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_school_supplies, container, false)
 
-        // List of container IDs and corresponding drawable resources
-        val containerDetails = listOf(
-            Triple(R.id.card_pencil, R.drawable.img_pencil, R.id.textViewPencil),
-            Triple(R.id.card_bondpaper, R.drawable.img_bondpaper, R.id.textViewBondpaper),
-            Triple(R.id.card_notebook, R.drawable.img_notebook, R.id.textViewNotebook),
-            Triple(R.id.card_ballpen, R.drawable.img_ballpen, R.id.textViewBallpen)
+        // Find RecyclerViews
+        val recyclerView: RecyclerView = view.findViewById(R.id.recyclerViewEquipments0)
+        val recyclerView2: RecyclerView = view.findViewById(R.id.recyclerViewEquipments1)
+
+        // Sample data for first RecyclerView
+        val equipmentList = listOf(
+            Equipment("Ballpoint Pens", R.drawable.img_ballpen),
+            Equipment("Pencils", R.drawable.img_pencil),
+            Equipment("Glue", R.drawable.img_glue),
+            Equipment("Highlighters", R.drawable.img_highlighters),
+            Equipment("Notebooks", R.drawable.img_notebook),
+            Equipment("Paint Sets", R.drawable.img_paintsets),
+            Equipment("Geometry Sets", R.drawable.img_geometryset),
+            Equipment("Scissors", R.drawable.img_scissor)
         )
 
-        // Set click listeners for each container
-        containerDetails.forEach { (containerId, drawable, textViewId) ->
-            val container = view.findViewById<LinearLayout>(containerId)
-            container.setOnClickListener {
-                onContainerSelected(it)
-                val selectedText = view.findViewById<TextView>(textViewId).text.toString()
+        // Sample data for second RecyclerView
+        val equipmentList2 = listOf(
+            Equipment("Chalk", R.drawable.img_chalk),
+            Equipment("Markers", R.drawable.img_marker),
+            Equipment("Eraser", R.drawable.img_eraser),
+            Equipment("Stapler", R.drawable.img_stapler)
+        )
 
-                // Store the selected drawable and text
-                selectedDrawable = drawable
-                val bundle = Bundle()
-                bundle.putInt("selected_drawable", selectedDrawable ?: R.drawable.default_image)
-                bundle.putString("item_name", selectedText)
+        // Set up first RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.adapter = EquipmentsAdapter(equipmentList) { equipment ->
+            onItemSelected(equipment)
+        }
 
-                // Pass the selected details to RequestFormFragment
-                val requestFormFragment = RequestFormFragment()
-                requestFormFragment.arguments = bundle
-
-                // Replace fragment with RequestFormFragment
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.wrapper, requestFormFragment)
-                    .addToBackStack(null)
-                    .commit()
-            }
+        // Set up second RecyclerView
+        recyclerView2.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        recyclerView2.adapter = EquipmentsAdapter(equipmentList2) { equipment ->
+            onItemSelected(equipment)
         }
 
         return view
     }
 
-    private fun onContainerSelected(container: View) {
-        selectedContainer?.setBackgroundResource(android.R.color.transparent)
-        container.setBackgroundResource(R.drawable.selected_background)
-        selectedContainer = container
+    // Handle item click to pass data to next fragment
+    private fun onItemSelected(equipment: Equipment) {
+        selectedDrawable = equipment.imageResId
+        selectedItemName = equipment.name
+
+        // Prepare data to pass to RequestFormFragment
+        val bundle = Bundle().apply {
+            putInt("selected_drawable", selectedDrawable ?: R.drawable.default_image)
+            putString("item_name", selectedItemName)
+        }
+
+        // Create and navigate to RequestFormFragment
+        val requestFormFragment = RequestFormFragment().apply {
+            arguments = bundle
+        }
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.wrapper, requestFormFragment)
+            .addToBackStack(null)
+            .commit()
     }
 }

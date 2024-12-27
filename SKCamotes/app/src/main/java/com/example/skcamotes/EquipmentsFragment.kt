@@ -33,10 +33,10 @@ class EquipmentsFragment : Fragment() {
 
         // Sample data for second RecyclerView
         val equipmentList2 = listOf(
-            Equipment("Hammers", R.drawable.basket_img),
-            Equipment("Ladder", R.drawable.basket_jumpshot),
-            Equipment("Drills", R.drawable.basket_nivia),
-            Equipment("Saws", R.drawable.basket_busso)
+            Equipment("Hammers", R.drawable.img_hammer),
+            Equipment("Ladder", R.drawable.img_ladder),
+            Equipment("Drills", R.drawable.img_drill),
+            Equipment("Saws", R.drawable.img_saw)
         )
 
         // Set up first RecyclerView

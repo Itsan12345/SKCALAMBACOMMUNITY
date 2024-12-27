@@ -1,62 +1,92 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SportsFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".EquipmentsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="718dp"
+        android:background="@drawable/bg_sports"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Existing Sports Page Background -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/sportspage_bg"
-            android:layout_width="match_parent"
-            android:layout_height="216dp"
-            android:background="@drawable/sportspage_bg"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/sports_logo"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <!-- TabLayout and ViewPager2 -->
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewEquipmentsSports1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
+            android:clipToPadding="false"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sportspage_bg"
-            app:tabBackground="@drawable/tab_background_selector"
-            app:tabGravity="fill"
-            app:tabIndicatorColor="@color/purple_500"
-            app:tabIndicatorHeight="0dp"
-            app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/white"
-            app:tabTextColor="@color/black"
-            app:tabTextAppearance="@style/TabTextStyle"/>
+            app:layout_constraintTop_toBottomOf="@+id/basketballtxt" />
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="402dp"
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="192dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="Please Choose below:"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.082"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tabLayout" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/basketballtxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/inter_extrabold"
+            android:text="Basketball"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+
+        <TextView
+            android:id="@+id/volleyballtxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/inter_extrabold"
+            android:text="Volleyball"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewEquipmentsSports1" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewEquipmentsSports2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:clipToPadding="false"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/volleyballtxt" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- First CardView -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/CalambaGymContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="330dp"
+                android:layout_height="330dp">
+
+                <!-- Image -->
+                <ImageView
+                    android:id="@+id/ivHouse"
+                    android:layout_width="match_parent"
+                    android:layout_height="190dp"
+                    android:background="@drawable/img_gymcourt"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toTopOf="@id/tvTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- Title -->
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Barangay Calamba Gym"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ivHouse" />
+
+                <!-- Location -->
+                <TextView
+                    android:id="@+id/tvLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Brgy. Calamba, Cebu City"
+                    android:textColor="#000000"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+                <!-- Description -->
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="The Barangay Calamba Basketball Gym is a versatile indoor sports facility designed to host basketball games, community events, and recreational activities."
+                    android:textColor="#928787"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvLocation"
+                    app:layout_constraintVertical_bias="0.166" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Second CardView -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/ThirdFloorContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="45dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/CalambaGymContainer"
+            app:layout_constraintVertical_bias="0.5">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="330dp"
+                android:layout_height="330dp">
+
+                <!-- Image -->
+                <ImageView
+                    android:id="@+id/ivHouse2"
+                    android:layout_width="match_parent"
+                    android:layout_height="190dp"
+                    android:background="@drawable/img_thirdfloor"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toTopOf="@id/tvTitle2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- Title -->
+                <TextView
+                    android:id="@+id/tvTitle2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Third Floor Facility"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ivHouse2" />
+
+                <!-- Location -->
+                <TextView
+                    android:id="@+id/tvLocation2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Third Floor, Barangay Hall"
+                    android:textColor="#000000"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvTitle2" />
+
+                <!-- Description -->
+                <TextView
+                    android:id="@+id/tvPrice2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="The Third Floor Facility is a spacious area ideal for conferences, training, and workshops."
+                    android:textColor="#928787"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvLocation2"
+                    app:layout_constraintVertical_bias="0.166" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
