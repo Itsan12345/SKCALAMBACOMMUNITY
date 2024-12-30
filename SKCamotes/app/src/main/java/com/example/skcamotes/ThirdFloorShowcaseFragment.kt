@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -44,7 +45,21 @@ class ThirdFloorShowcaseFragment : Fragment(), OnMapReadyCallback {
         // Set up the MapView
         mapView = view.findViewById(R.id.thirdfloor_map_view)
         mapView.onCreate(savedInstanceState)
-        mapView.getMapAsync(this) // This ensures that onMapReady will be called when the map is ready
+        mapView.getMapAsync(this)
+
+        // Find the "book now" button and set up the click listener
+        val bookNowButton = view.findViewById<View>(R.id.book_now_button)
+        bookNowButton.setOnClickListener {
+            val thirdfloorTitleText = view.findViewById<TextView>(R.id.thirdfloor_title).text.toString()
+
+            // Create a new instance of ReservationBookingFragment and pass the gym title as an argument
+            val reservationBookingFragment = ReservationBookingFragment().apply {
+                arguments = Bundle().apply {
+                    putString("GYM_TITLE", thirdfloorTitleText)  // Pass gym title here
+                }
+            }
+            replaceFragment(reservationBookingFragment)
+        }
     }
 
     // Implement OnMapReadyCallback interface to configure the map when ready
@@ -85,4 +100,14 @@ class ThirdFloorShowcaseFragment : Fragment(), OnMapReadyCallback {
         super.onLowMemory()
         mapView.onLowMemory()
     }
+
+    // Method to replace the current fragment
+    private fun replaceFragment(fragment: Fragment) {
+        requireActivity().supportFragmentManager.beginTransaction().apply {
+            replace(R.id.wrapper, fragment) // R.id.wrapper is the container where the fragments are replaced
+            addToBackStack(null) // Add to back stack to allow going back to the previous fragment
+            commit()
+        }
+    }
 }
+

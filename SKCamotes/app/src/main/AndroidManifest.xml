@@ -21,6 +21,8 @@
         <activity
             android:name=".SportsRequest"
             android:exported="false" />
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

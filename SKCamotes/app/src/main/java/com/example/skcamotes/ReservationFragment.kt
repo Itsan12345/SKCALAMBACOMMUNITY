@@ -56,11 +56,12 @@ class ReservationFragment : Fragment() {
         // Reset all filters to default style
         listOf(tvAll, tvIndoor, tvOutdoor).forEach {
             it.setTextColor(requireContext().getColor(R.color.gray))
-            it.setBackgroundColor(requireContext().getColor(android.R.color.transparent))
+            it.setBackgroundResource(R.drawable.unselected_filter_background)
         }
 
         // Highlight the selected filter
-        selectedTextView.setTextColor(requireContext().getColor(R.color.purple_700))
+        selectedTextView.setTextColor(requireContext().getColor(android.R.color.white))
         selectedTextView.setBackgroundResource(R.drawable.selected_filter_background)
     }
+
 }

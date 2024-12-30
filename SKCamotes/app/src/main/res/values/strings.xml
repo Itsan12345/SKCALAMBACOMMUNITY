@@ -3,6 +3,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="carousel_image">Carousel Image</string>
+
+    <string name="left_arrow">Left Arrow</string>
+
+    <string name="right_arrow">Right Arrow</string>
 
     <string name="google_map_api_key">AIzaSyCwYV-Dqa2Cixc6xtJ1Kr2otQJidtWwTK8</string>
 
