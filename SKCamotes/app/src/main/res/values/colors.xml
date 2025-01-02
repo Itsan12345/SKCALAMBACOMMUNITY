@@ -4,7 +4,8 @@
     <!-- Purple color variants -->
     <color name="purple_200">#BB86FC</color> <!-- Light Purple -->
     <color name="purple_500">#6200EE</color> <!-- Primary Purple -->
-    <color name="purple_700">#9510D3</color> <!-- Dark Purple -->
+    <color name="purple_700">#9510D3</color>
+    <color name="purple_300">#744DA9</color><!-- Dark Purple -->
 
 
     <!-- Colors for Selected Tab Background -->

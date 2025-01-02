@@ -28,9 +28,9 @@ class HomeFragment : Fragment() {
 
         // Define your image list
         val imageList = listOf(
-            R.drawable.img_saw,
-            R.drawable.img_chairr,
-            R.drawable.img_notebook
+            R.drawable.carousel_sample,
+            R.drawable.carousel_sample,
+            R.drawable.carousel_sample
         )
 
         // Set up the RecyclerView with the custom layout manager and adapter

@@ -39,7 +39,7 @@
 
                 <ImageView
                     android:id="@+id/ic_logo"
-                    android:layout_width="59dp"
+                    android:layout_width="49dp"
                     android:layout_height="42dp"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/sk_calamba_logo_no_bg2" />
@@ -80,7 +80,7 @@
                 android:id="@+id/txt_welcome"
                 android:layout_width="223dp"
                 android:layout_height="54dp"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/inter_extrabold"
                 android:text="Welcome to\nCalamba CommUnity!"
@@ -95,7 +95,7 @@
                 android:id="@+id/txt_tagline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
                 android:fontFamily="sans-serif"
                 android:text="''Together We Thrive, United We Rise.''"
@@ -151,9 +151,9 @@
             android:id="@+id/et_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="-15dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/search_edittext_background"
             android:drawableStart="@drawable/ic_search"
             android:drawablePadding="8dp"
@@ -161,10 +161,70 @@
             android:padding="10dp"
             android:textColorHint="#B0A5A5"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="275dp"
+            android:layout_marginTop="10dp"
+            android:background="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/carouselRecyclerView">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:src="@drawable/line_1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="53dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/ic_announcement"
+                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="27dp"
+                android:text="Announcements"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                app:layout_constraintStart_toEndOf="@+id/imageView8"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:src="@drawable/line_2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="208dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
