@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -50,6 +51,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.play.services.maps)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     implementation(libs.animatedBottomBar)
     implementation("com.google.android.gms:play-services-auth:20.0.1")

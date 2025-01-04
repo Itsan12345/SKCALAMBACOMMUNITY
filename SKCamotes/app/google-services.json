@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "975443110643",
+    "project_id": "calambacommunity",
+    "storage_bucket": "calambacommunity.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975443110643:android:32f606706e72e4745de586",
+        "android_client_info": {
+          "package_name": "com.example.skcamotes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDg915f7hL2D8m8bRHsNImYUq_8sBv_ceM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

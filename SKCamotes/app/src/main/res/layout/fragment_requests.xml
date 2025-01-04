@@ -64,8 +64,8 @@
                             android:orientation="vertical">
 
                             <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
+                                android:layout_width="55dp"
+                                android:layout_height="55dp"
                                 android:background="@drawable/ic_sports" />
 
                             <TextView
@@ -74,7 +74,7 @@
                                 android:fontFamily="@font/leaguegothicregular"
                                 android:text="Sports"
                                 android:textColor="#000"
-                                android:textSize="25sp" />
+                                android:textSize="28sp" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
