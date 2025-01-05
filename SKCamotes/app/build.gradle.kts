@@ -54,13 +54,15 @@ dependencies {
     implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     implementation(libs.animatedBottomBar)
-    implementation("com.google.android.gms:play-services-auth:20.0.1")
+    implementation(libs.play.services.auth)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("androidx.cardview:cardview:1.0.0")
+    implementation(libs.androidx.cardview)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-    implementation("androidx.fragment:fragment-ktx:1.5.7")
-
+    implementation(libs.androidx.fragment.ktx)
+    implementation (libs.material.v190)
+    implementation (libs.firebase.auth.v2101)
+    implementation (libs.play.services.auth.v2001)
 
 }

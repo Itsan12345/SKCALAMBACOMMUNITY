@@ -28,7 +28,7 @@ class EmergenciesFragment : Fragment() {
         BFPcalamba.setOnClickListener {
             // Replace with another fragment, e.g., ExampleFragment
             replaceFragment(BFPCalambaFragment())
-        }
+        }   
 
         val CMCCalamba: CardView = view.findViewById(R.id.cmccalamba)
         CMCCalamba.setOnClickListener {

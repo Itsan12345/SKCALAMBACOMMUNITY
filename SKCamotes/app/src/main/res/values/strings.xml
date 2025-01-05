@@ -13,6 +13,8 @@
 
     <string name="google_map_api_key">AIzaSyCwYV-Dqa2Cixc6xtJ1Kr2otQJidtWwTK8</string>
 
+    <string name="web_client_id">975443110643-vltpq55s41brje5ac3bmf2aaq7n9guvk.apps.googleusercontent.com</string>
+
     <!-- Date options -->
     <string-array name="date_options">
         <item>Select Date</item>

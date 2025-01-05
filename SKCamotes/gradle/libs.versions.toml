@@ -1,6 +1,9 @@
 [versions]
 animatedBottomBar = "1.1.0"
 agp = "8.7.3"
+cardview = "1.0.0"
+fragmentKtx = "1.8.5"
+googleFirebaseAuth = "21.0.1"
 kotlin = "1.9.24"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -10,16 +13,22 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.2.0"
+materialVersion = "1.9.0"
+playServicesAuth = "21.3.0"
+playServicesAuthVersion = "20.0.1"
 playServicesMaps = "19.0.0"
 recyclerview = "1.3.2"
 googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.1.0"
 
 [libraries]
+androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-navigation-fragment-ktx = "androidx.navigation:navigation-fragment-ktx:2.8.4"
 androidx-navigation-ui-ktx = "androidx.navigation:navigation-ui-ktx:2.8.4"
 animatedBottomBar = { group = "nl.joery.animatedbottombar", name = "library", version.ref = "animatedBottomBar" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+firebase-auth-v2101 = { module = "com.google.firebase:firebase-auth", version.ref = "googleFirebaseAuth" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -27,6 +36,9 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+material-v190 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+play-services-auth-v2001 = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuthVersion" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }

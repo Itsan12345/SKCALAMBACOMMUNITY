@@ -12,7 +12,12 @@
           "package_name": "com.example.skcamotes"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "975443110643-vltpq55s41brje5ac3bmf2aaq7n9guvk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDg915f7hL2D8m8bRHsNImYUq_8sBv_ceM"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "975443110643-vltpq55s41brje5ac3bmf2aaq7n9guvk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
