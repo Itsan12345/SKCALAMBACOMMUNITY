@@ -52,6 +52,8 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.androidx.recyclerview)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.database.ktx)
+    implementation(libs.firebase.database)
     testImplementation(libs.junit)
     implementation(libs.animatedBottomBar)
     implementation(libs.play.services.auth)
@@ -64,5 +66,8 @@ dependencies {
     implementation (libs.material.v190)
     implementation (libs.firebase.auth.v2101)
     implementation (libs.play.services.auth.v2001)
+    implementation (libs.firebase.core)  // Firebase Core
+    implementation(platform(libs.firebase.bom))
+    implementation (libs.libphonenumber)
 
 }

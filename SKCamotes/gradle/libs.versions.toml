@@ -2,6 +2,10 @@
 animatedBottomBar = "1.1.0"
 agp = "8.7.3"
 cardview = "1.0.0"
+firebaseAuthVersion = "21.0.3"
+firebaseBom = "33.7.0"
+firebaseCore = "21.1.1"
+firebaseDatabaseVersion = "20.0.5"
 fragmentKtx = "1.8.5"
 googleFirebaseAuth = "21.0.1"
 kotlin = "1.9.24"
@@ -10,6 +14,7 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
+libphonenumber = "8.12.46"
 material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.2.0"
@@ -20,6 +25,8 @@ playServicesMaps = "19.0.0"
 recyclerview = "1.3.2"
 googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.1.0"
+firebaseDatabaseKtx = "21.0.0"
+firebaseDatabase = "21.0.0"
 
 [libraries]
 androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
@@ -29,10 +36,15 @@ androidx-navigation-ui-ktx = "androidx.navigation:navigation-ui-ktx:2.8.4"
 animatedBottomBar = { group = "nl.joery.animatedbottombar", name = "library", version.ref = "animatedBottomBar" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 firebase-auth-v2101 = { module = "com.google.firebase:firebase-auth", version.ref = "googleFirebaseAuth" }
+firebase-auth-v2103 = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuthVersion" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-core = { module = "com.google.firebase:firebase-core", version.ref = "firebaseCore" }
+firebase-database-v2005 = { module = "com.google.firebase:firebase-database", version.ref = "firebaseDatabaseVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumber" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
@@ -42,6 +54,8 @@ play-services-auth-v2001 = { module = "com.google.android.gms:play-services-auth
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
