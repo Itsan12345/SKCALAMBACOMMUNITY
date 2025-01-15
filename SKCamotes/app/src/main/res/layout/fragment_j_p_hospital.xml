@@ -60,7 +60,7 @@
                     android:layout_marginStart="10dp"
                     android:clickable="true"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_left_arrow"
+                    android:src="@drawable/ic_arrow_left_black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

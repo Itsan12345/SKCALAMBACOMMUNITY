@@ -12,4 +12,18 @@
         <item name="android:textSize">20sp</item> <!-- Use 'sp' instead of 'dp' for text size -->
         <item name="android:textStyle">italic</item> <!-- Apply italic style -->
     </style>
+
+    <style name="DotTabIndicator" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">#000000</item>
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabSelectedTextColor">#FFFFFF</item>
+        <item name="tabTextColor">#B0A5A5</item>
+    </style>
+
+    <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
+        <item name="tabMinWidth">32dp</item> <!-- Adjust gap size -->
+        <item name="tabPaddingStart">6dp</item>
+        <item name="tabPaddingEnd">6dp</item>
+    </style>
+
 </resources>

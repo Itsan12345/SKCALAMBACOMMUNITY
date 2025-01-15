@@ -29,29 +29,30 @@ class SignUpPage : AppCompatActivity() {
         val signupButton: Button = findViewById(R.id.btn_signup)
         signupButton.setOnClickListener {
             val name = findViewById<EditText>(R.id.et_name).text.toString().trim()
+            val phone = findViewById<EditText>(R.id.et_phone_number).text.toString().trim()
             val email = findViewById<EditText>(R.id.et_email).text.toString().trim()
             val password = findViewById<EditText>(R.id.et_password).text.toString().trim()
 
-            if (validateInputs(name, email, password)) {
-                createAccount(name, email, password)
+            if (validateInputs(name, phone, email, password)) {
+                createAccount(name, phone, email, password)
             }
         }
     }
 
-    private fun validateInputs(name: String, email: String, password: String): Boolean {
-        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || password.length < 6) {
+    private fun validateInputs(name: String, phone: String, email: String, password: String): Boolean {
+        if (name.isEmpty() || phone.isEmpty() || email.isEmpty() || password.isEmpty() || password.length < 6) {
             Toast.makeText(this, "Please provide valid inputs", Toast.LENGTH_SHORT).show()
             return false
         }
         return true
     }
 
-    private fun createAccount(name: String, email: String, password: String) {
+    private fun createAccount(name: String, phone: String, email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     sendEmailVerification() // Send email verification after account creation
-                    saveUserToDatabase(name, email)
+                    saveUserToDatabase(name, phone, email)
                     Toast.makeText(this, "Signup successful! Please check your email for verification.", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, LoginPage::class.java))
                     finish()
@@ -73,12 +74,13 @@ class SignUpPage : AppCompatActivity() {
             }
     }
 
-    private fun saveUserToDatabase(name: String, email: String) {
-        val database = FirebaseDatabase.getInstance().getReference("users")
+    private fun saveUserToDatabase(name: String, phone: String, email: String) {
+        val database = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/").reference.child("Users")
         val userRole = if (email == ADMIN_EMAIL) "admin" else "user"
 
         val userData = mapOf(
             "name" to name,
+            "phone" to phone,
             "email" to email,
             "role" to userRole
         )

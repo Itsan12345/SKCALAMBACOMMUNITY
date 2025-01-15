@@ -122,11 +122,36 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.393" />
 
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabDots"
+            android:layout_width="wrap_content"
+            android:layout_height="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/carouselRecyclerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_search"
+            app:layout_constraintVertical_bias="0.925"
+            app:tabBackground="@drawable/selector_dot_tab"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp"
+            app:tabMode="fixed"
+            app:tabPaddingEnd="4dp"
+            app:tabPaddingStart="4dp"
+            app:tabRippleColor="@null"
+            app:tabSelectedTextColor="@android:color/transparent"
+            app:tabTextColor="@android:color/transparent"
+            tools:ignore="UseCompatLoadingForDrawables">
+
+            <!-- Adding the dot size dynamically using drawable -->
+        </com.google.android.material.tabs.TabLayout>
+
         <ImageButton
             android:id="@+id/btnLeftArrow"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="-10dp"
+            android:layout_marginStart="10dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/left_arrow"
             android:src="@drawable/ic_left_arrow"
@@ -139,7 +164,7 @@
             android:id="@+id/btnRightArrow"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginEnd="-10dp"
+            android:layout_marginEnd="10dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/right_arrow"
             android:src="@drawable/ic_right_arrow"
@@ -166,6 +191,7 @@
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout6"
             android:layout_width="match_parent"
             android:layout_height="275dp"
             android:layout_marginTop="10dp"
@@ -215,6 +241,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/announcements_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="208dp"
                 android:layout_marginTop="5dp"

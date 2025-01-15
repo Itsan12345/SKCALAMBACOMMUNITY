@@ -1,16 +1,19 @@
-package com.example.skcamotes
+package com.example.skcamotes.AdminSide
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.skcamotes.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class AdminPage : AppCompatActivity() {
 
@@ -21,19 +24,21 @@ class AdminPage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_page)
 
+        // Initialize FirebaseAuth and GoogleSignInClient
         auth = FirebaseAuth.getInstance()
-
-        // Initialize Google SignIn Client
         googleSignInClient = GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN)
 
-        // Set up edge-to-edge layout
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        // Set up TabLayout and ViewPager
+        val tabLayout = findViewById<TabLayout>(R.id.tablayoutcontainer)
+        val viewPager = findViewById<androidx.viewpager2.widget.ViewPager2>(R.id.viewpager)
+        val adapter = AdminPagerAdapter(this)
+        viewPager.adapter = adapter
+        val tabTitles = arrayOf("Users", "Announcements", "Requests", "Reservations")
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = tabTitles[position]
+        }.attach()
 
-        // Logout button functionality
+        // Set up Logout button
         val logoutButton: Button = findViewById(R.id.logout_button)
         logoutButton.setOnClickListener {
             showSignOutDialog()
@@ -55,5 +60,19 @@ class AdminPage : AppCompatActivity() {
             }
             .setNegativeButton("No", null)
             .show()
+    }
+}
+
+// Adapter to manage fragments for each tab
+class AdminPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
+    override fun getItemCount(): Int = 4 // Four tabs
+    override fun createFragment(position: Int): Fragment {
+        return when (position) {
+            0 -> UsersFragment()
+            1 -> AnnouncementsFragment()
+            2 -> RequestsFragment()
+            3 -> ReservationsFragment()
+            else -> throw IllegalArgumentException("Invalid position")
+        }
     }
 }

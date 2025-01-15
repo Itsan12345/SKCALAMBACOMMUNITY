@@ -6,21 +6,36 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.skcamotes.AdminSide.Announcement
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class HomeFragment : Fragment() {
+
+    private lateinit var announcementsRecyclerView: RecyclerView
+    private lateinit var announcementsAdapter: AnnouncementsAdapter
+    private lateinit var databaseReference: DatabaseReference
 
     private lateinit var carouselRecyclerView: RecyclerView
     private lateinit var btnLeftArrow: ImageButton
     private lateinit var btnRightArrow: ImageButton
     private lateinit var profileButton: ImageButton
     private lateinit var layoutManager: CustomCarouselLayoutManager
+    private lateinit var tabDots: TabLayout // TabLayout for dots
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -38,34 +53,78 @@ class HomeFragment : Fragment() {
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
         )
 
-        // Initialize the RecyclerView, arrows, and profile button
+        // Announcements RecyclerView
+        announcementsRecyclerView = view.findViewById(R.id.announcements_recyclerview)
+        announcementsRecyclerView.layoutManager = LinearLayoutManager(context)
+        announcementsAdapter = AnnouncementsAdapter()
+        announcementsRecyclerView.adapter = announcementsAdapter
+
+        // Firebase Database reference
+        databaseReference = FirebaseDatabase.getInstance(
+            "https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        ).reference.child("announcements")
+
+        // Fetch announcements from Firebase
+        fetchAnnouncements()
+
+        // Carousel setup
         carouselRecyclerView = view.findViewById(R.id.carouselRecyclerView)
         btnLeftArrow = view.findViewById(R.id.btnLeftArrow)
         btnRightArrow = view.findViewById(R.id.btnRightArrow)
         profileButton = view.findViewById(R.id.ic_Profile)
+        tabDots = view.findViewById(R.id.tabDots) // Initialize TabLayout for dots
 
-        // Define your image list
         val imageList = listOf(
             R.drawable.request_carouselbg,
             R.drawable.reservation_carouselbg,
-            R.drawable.carousel_sample
+            R.drawable.emergency_carouselbg
         )
 
-        // Set up the RecyclerView with the custom layout manager and adapter
         layoutManager = CustomCarouselLayoutManager(requireContext())
         carouselRecyclerView.layoutManager = layoutManager
 
-        val adapter = CarouselAdapter(imageList)
-        carouselRecyclerView.adapter = adapter
+        val carouselAdapter = CarouselAdapter(imageList)
+        carouselRecyclerView.adapter = carouselAdapter
 
-        // Scroll to the middle image
+        val snapHelper = LinearSnapHelper()
+        snapHelper.attachToRecyclerView(carouselRecyclerView)
+
+        // Scroll to the middle image initially
         val middlePosition = imageList.size / 2
         carouselRecyclerView.scrollToPosition(middlePosition)
+        updateArrowVisibility(middlePosition, imageList.size)
 
-        // Update arrow visibility on creation
-        updateArrowVisibility()
+        // Add TabLayout dots dynamically
+        for (i in imageList.indices) {
+            tabDots.addTab(tabDots.newTab())
+        }
 
-        // Arrow button click listeners
+        // Add gap between dots
+        addGapBetweenDots(tabDots)
+
+        // Synchronize dots with RecyclerView scrolling
+        carouselRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    val currentPosition = layoutManager.findFirstVisibleItemPosition()
+                    tabDots.selectTab(tabDots.getTabAt(currentPosition))
+                }
+            }
+        })
+
+        // Synchronize RecyclerView with dots
+        tabDots.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.position?.let { position ->
+                    carouselRecyclerView.smoothScrollToPosition(position)
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+
+        // Arrow click listeners
         btnLeftArrow.setOnClickListener {
             val currentPosition = layoutManager.findFirstVisibleItemPosition()
             if (currentPosition > 0) {
@@ -76,50 +135,84 @@ class HomeFragment : Fragment() {
 
         btnRightArrow.setOnClickListener {
             val currentPosition = layoutManager.findFirstVisibleItemPosition()
-            if (currentPosition < adapter.itemCount - 1) {
+            if (currentPosition < carouselAdapter.itemCount - 1) {
                 carouselRecyclerView.smoothScrollToPosition(currentPosition + 1)
                 updateArrowVisibility(currentPosition + 1, imageList.size)
             }
         }
 
-        // Listen for scroll changes to update arrow visibility
+        // RecyclerView scroll listener for dynamic arrow visibility
         carouselRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                updateArrowVisibility()
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    val currentPosition = layoutManager.findFirstVisibleItemPosition()
+                    updateArrowVisibility(currentPosition, imageList.size)
+                }
             }
         })
 
-        // Handle Profile button click for sign-out
+        // Profile button click listener
         profileButton.setOnClickListener {
-            showSignOutDialog()
+            val intent = Intent(requireContext(), ProfileActivity::class.java)
+            startActivity(intent)
         }
 
         return view
     }
 
-    private fun updateArrowVisibility(currentPosition: Int? = null, itemCount: Int? = null) {
-        val position = currentPosition ?: layoutManager.findFirstVisibleItemPosition()
-        val totalItems = itemCount ?: (carouselRecyclerView.adapter?.itemCount ?: 0)
+    private fun fetchAnnouncements() {
+        // Check if the user is signed in
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            // If no user is signed in, do not attempt to fetch announcements
+            Toast.makeText(context, "User is not signed in. Please sign in again.", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        btnLeftArrow.visibility = if (position > 0) View.VISIBLE else View.INVISIBLE
-        btnRightArrow.visibility = if (position < totalItems - 1) View.VISIBLE else View.INVISIBLE
-    }
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val announcementsList = mutableListOf<Announcement>()
+                for (dataSnapshot in snapshot.children) {
+                    val announcement = dataSnapshot.getValue(Announcement::class.java)
+                    // Check if the announcement has valid data
+                    if (announcement != null && announcement.title.isNotEmpty() && announcement.content.isNotEmpty()) {
+                        announcementsList.add(announcement)
+                    }
+                }
 
-    private fun showSignOutDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Sign Out")
-            .setMessage("Are you sure you want to sign out?")
-            .setPositiveButton("Yes") { _, _ ->
-                googleSignInClient.signOut().addOnCompleteListener {
-                    auth.signOut()
-                    val intent = Intent(requireContext(), LoginPage::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    requireActivity().finish()
+                if (announcementsList.isNotEmpty()) {
+                    // Show RecyclerView with data
+                    announcementsRecyclerView.visibility = View.VISIBLE
+                    announcementsAdapter.submitList(announcementsList)
+                } else {
+                    // Hide RecyclerView and show a message indicating no data
+                    announcementsRecyclerView.visibility = View.GONE
+                    Toast.makeText(context, "No announcements available", Toast.LENGTH_SHORT).show()
                 }
             }
-            .setNegativeButton("No", null)
-            .show()
+
+            override fun onCancelled(error: DatabaseError) {
+                // If the operation is cancelled, check for Firebase authentication issues
+                if (auth.currentUser == null) {
+                    Toast.makeText(context, "User signed out", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "Failed to load data: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
+    private fun updateArrowVisibility(position: Int, itemCount: Int) {
+        btnLeftArrow.visibility = if (position == 0) View.INVISIBLE else View.VISIBLE
+        btnRightArrow.visibility = if (position == itemCount - 1) View.INVISIBLE else View.VISIBLE
+    }
+
+    private fun addGapBetweenDots(tabLayout: TabLayout) {
+        for (i in 0 until tabLayout.tabCount) {
+            val tab = (tabLayout.getChildAt(0) as ViewGroup).getChildAt(i)
+            val layoutParams = tab.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.setMargins(16, 0, 16, 0) // Adjust margins to add gap
+            tab.requestLayout()
+        }
     }
 }
