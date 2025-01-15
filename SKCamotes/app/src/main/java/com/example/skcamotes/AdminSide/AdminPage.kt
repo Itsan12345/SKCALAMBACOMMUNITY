@@ -70,7 +70,7 @@ class AdminPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(acti
         return when (position) {
             0 -> UsersFragment()
             1 -> AnnouncementsFragment()
-            2 -> RequestsFragment()
+            2 -> AdminRequestsFragment()
             3 -> ReservationsFragment()
             else -> throw IllegalArgumentException("Invalid position")
         }
