@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.skcamotes"
-        minSdk = 24
+        minSdk = 28
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database.ktx)
     implementation(libs.firebase.database)
+    implementation(libs.car.ui.lib)
     testImplementation(libs.junit)
     implementation(libs.animatedBottomBar)
     implementation(libs.play.services.auth)
@@ -69,5 +70,5 @@ dependencies {
     implementation (libs.firebase.core)  // Firebase Core
     implementation(platform(libs.firebase.bom))
     implementation (libs.libphonenumber)
-
+    implementation (libs.car.ui.lib.v250)
 }

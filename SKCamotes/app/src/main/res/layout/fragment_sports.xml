@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".EquipmentsFragment">
+    tools:context=".RequestFeature.EquipmentsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -89,22 +89,21 @@
             app:layout_constraintTop_toBottomOf="@+id/volleyballtxt" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btn_back"
             android:layout_width="63dp"
             android:layout_height="21dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="12dp"
             android:layout_marginBottom="4dp"
             android:background="@android:color/transparent"
-            android:text="Back"
-            android:textColor="#A55A89"
-            android:textAllCaps="false"
-            android:textSize="13sp"
             android:drawableStart="@drawable/ic_back_arrow"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
+            android:text="Back"
+            android:textAllCaps="false"
+            android:textColor="#A55A89"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toTopOf="@+id/textView5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -61,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Status: Pending Request/Approved Request"
+            android:text="Status: Pending Request"
             android:textSize="14sp"
             android:textStyle="italic" />
     </LinearLayout>

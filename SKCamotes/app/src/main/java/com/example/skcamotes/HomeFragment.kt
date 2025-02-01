@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import android.os.Handler
+import android.os.Looper
 
 class HomeFragment : Fragment() {
 
@@ -39,6 +41,27 @@ class HomeFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+    private val handler = Handler(Looper.getMainLooper())
+    private val autoScrollRunnable = object : Runnable {
+        override fun run() {
+            val currentPosition = layoutManager.findFirstVisibleItemPosition()
+            val totalItems = carouselRecyclerView.adapter?.itemCount ?: 0
+
+            if (totalItems > 0) {
+                val nextPosition = if (currentPosition < totalItems - 1) {
+                    currentPosition + 1
+                } else {
+                    0 // Restart from the first image
+                }
+
+                carouselRecyclerView.smoothScrollToPosition(nextPosition)
+                tabDots.selectTab(tabDots.getTabAt(nextPosition))
+            }
+
+            handler.postDelayed(this, 5000) // Auto-scroll every 5 seconds
+        }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,6 +122,9 @@ class HomeFragment : Fragment() {
             tabDots.addTab(tabDots.newTab())
         }
 
+        // Start auto-scroll
+        handler.postDelayed(autoScrollRunnable, 5000)
+
         // Add gap between dots
         addGapBetweenDots(tabDots)
 
@@ -158,6 +184,11 @@ class HomeFragment : Fragment() {
         }
 
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        handler.removeCallbacks(autoScrollRunnable) // Stop auto-scroll when fragment is destroyed
     }
 
     private fun fetchAnnouncements() {

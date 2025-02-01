@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,7 +37,6 @@ class AdminRequestsFragment : Fragment() {
             .getReference("Users")
 
         adapter = AdminRequestsAdapter(userList) { user ->
-            // On CardView click, show the requested equipment for the user
             showRequestedEquipmentDialog(user)
         }
 
@@ -50,7 +52,9 @@ class AdminRequestsFragment : Fragment() {
                 userList.clear()
                 for (userSnapshot in snapshot.children) {
                     val user = userSnapshot.getValue(AdminRequestDataClass::class.java)
-                    user?.let { userList.add(it) }
+                    if (user != null && user.name.isNotBlank() && user.email.isNotBlank() && user.phone.isNotBlank()) {
+                        userList.add(user)
+                    }
                 }
                 adapter.notifyDataSetChanged()
             }
@@ -61,61 +65,142 @@ class AdminRequestsFragment : Fragment() {
         })
     }
 
-    // Method to fetch and show the requested equipment for the user
     private fun showRequestedEquipmentDialog(user: AdminRequestDataClass) {
         val userEquipmentsRef = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/")
-            .getReference("UserRequestedEquipments") // Firebase path for the requested equipment
+            .getReference("UserRequestedEquipments")
 
-        userEquipmentsRef.orderByChild("userEmail").equalTo(user.email).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val requestedEquipments = mutableListOf<String>()
-                for (equipmentSnapshot in snapshot.children) {
-                    val equipment = equipmentSnapshot.getValue(UserRequestedEquipment::class.java)
-                    equipment?.let {
-                        // Fetch all necessary information
-                        val description = equipment.description ?: "N/A"
-                        val email = equipment.userEmail ?: "N/A"
-                        val fullName = equipment.fullName ?: "N/A"
-                        val itemName = equipment.itemName ?: "N/A"
-                        val phoneNumber = equipment.phoneNumber ?: "N/A"
-                        val quantity = equipment.quantity ?: "N/A"
-                        val selectedDate = equipment.selectedDate ?: "N/A"
-                        val selectedTime = equipment.selectedTime ?: "N/A"
-
-                        // Combine the information
-                        requestedEquipments.add(
-                            """
-                                Description: $description
-                                Email: $email
-                                Full Name: $fullName
-                                Item Name: $itemName
-                                Phone Number: $phoneNumber
-                                Quantity: $quantity
-                                Selected Date: $selectedDate
-                                Selected Time: $selectedTime
-                            """.trimIndent()
-                        )
+        userEquipmentsRef.orderByChild("userEmail").equalTo(user.email)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val equipmentViews = mutableListOf<View>()
+                    for (equipmentSnapshot in snapshot.children) {
+                        val equipment = equipmentSnapshot.getValue(UserRequestedEquipment::class.java)
+                        equipment?.let {
+                            val view = createEquipmentView(equipment, user)
+                            equipmentViews.add(view)
+                        }
                     }
+                    showEquipmentDetailsDialog(user, equipmentViews)
                 }
 
-                // Show the equipment in a dialog
-                showDialogWithRequestedEquipmentDetails(requestedEquipments)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Handle error
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle error
+                }
+            })
     }
 
-    private fun showDialogWithRequestedEquipmentDetails(equipments: List<String>) {
+    private fun createEquipmentView(equipment: UserRequestedEquipment, user: AdminRequestDataClass): View {
+        val inflater = LayoutInflater.from(requireContext())
+        val view = inflater.inflate(R.layout.equipment_item_layout, null)
+
+        view.findViewById<TextView>(R.id.tvItemName).text = equipment.itemName ?: "N/A"
+        view.findViewById<TextView>(R.id.tvQuantity).text = equipment.quantity ?: "N/A"
+        view.findViewById<TextView>(R.id.tvFullName).text = equipment.fullName ?: "N/A"
+        view.findViewById<TextView>(R.id.tvDescription).text = equipment.description ?: "N/A"
+        view.findViewById<TextView>(R.id.tvPhoneNumber).text = equipment.phoneNumber ?: "N/A"
+        view.findViewById<TextView>(R.id.tvDateTime).text =
+            "${equipment.selectedDate ?: "N/A"} ${equipment.selectedTime ?: "N/A"}"
+
+        view.findViewById<Button>(R.id.btnAccept).setOnClickListener {
+            acceptEquipmentRequest(equipment, user)
+        }
+        view.findViewById<Button>(R.id.btnReject).setOnClickListener {
+            rejectEquipmentRequest(equipment, user)
+        }
+
+        return view
+    }
+
+    private fun showEquipmentDetailsDialog(user: AdminRequestDataClass, equipmentViews: List<View>) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Requested Equipment")
 
-        // Display the requested equipment details
-        val equipmentDetails = equipments.joinToString("\n\n")
-        builder.setMessage(equipmentDetails.ifEmpty { "No requested equipment found." })
+        val container = LinearLayout(requireContext())
+        container.orientation = LinearLayout.VERTICAL
+        for (equipmentView in equipmentViews) {
+            container.addView(equipmentView)
+        }
 
+        builder.setView(container)
+        builder.setPositiveButton("Close") { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.create().show()
+    }
+
+    private fun acceptEquipmentRequest(equipment: UserRequestedEquipment, user: AdminRequestDataClass) {
+        val acceptedRequestsRef = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/")
+            .getReference("AcceptedRequests")
+
+        acceptedRequestsRef.push().setValue(equipment)
+            .addOnSuccessListener {
+                removeRequestFromDatabase(equipment)
+                showSuccessDialog("Equipment request accepted successfully.")
+            }
+            .addOnFailureListener {
+                showErrorDialog("Failed to accept the equipment request. Please try again.")
+            }
+    }
+
+    private fun rejectEquipmentRequest(equipment: UserRequestedEquipment, user: AdminRequestDataClass) {
+        val rejectedRequestsRef = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/")
+            .getReference("RejectedRequests")
+
+        rejectedRequestsRef.push().setValue(equipment)
+            .addOnSuccessListener {
+                removeRequestFromDatabase(equipment)
+                showSuccessDialog("Equipment request rejected successfully.")
+            }
+            .addOnFailureListener {
+                showErrorDialog("Failed to reject the equipment request. Please try again.")
+            }
+    }
+
+    private fun removeRequestFromDatabase(equipment: UserRequestedEquipment) {
+        val userEquipmentsRef = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/")
+            .getReference("UserRequestedEquipments")
+
+        userEquipmentsRef.orderByChild("userEmail").equalTo(equipment.userEmail)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (equipmentSnapshot in snapshot.children) {
+                        val currentEquipment = equipmentSnapshot.getValue(UserRequestedEquipment::class.java)
+                        if (currentEquipment?.itemName == equipment.itemName &&
+                            currentEquipment.quantity == equipment.quantity &&
+                            currentEquipment.selectedDate == equipment.selectedDate &&
+                            currentEquipment.selectedTime == equipment.selectedTime &&
+                            currentEquipment.userEmail == equipment.userEmail
+                        ) {
+                            equipmentSnapshot.ref.removeValue()
+                                .addOnSuccessListener {
+
+                                }
+                                .addOnFailureListener {
+                                    showErrorDialog("Failed to remove the request. Please try again.")
+                                }
+                            break
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    showErrorDialog("Failed to access the database. Please try again later.")
+                }
+            })
+    }
+
+    private fun showSuccessDialog(message: String) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Success")
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+        builder.create().show()
+    }
+
+    private fun showErrorDialog(message: String) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Error")
+        builder.setMessage(message)
         builder.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
         builder.create().show()
     }

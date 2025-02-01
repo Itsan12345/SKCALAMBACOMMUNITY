@@ -2,6 +2,7 @@
 animatedBottomBar = "1.1.0"
 agp = "8.7.3"
 cardview = "1.0.0"
+carUiLibVersion = "2.5.0"
 firebaseAuthVersion = "21.0.3"
 firebaseBom = "33.7.0"
 firebaseCore = "21.1.1"
@@ -27,6 +28,7 @@ googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.1.0"
 firebaseDatabaseKtx = "21.0.0"
 firebaseDatabase = "21.0.0"
+carUiLib = "2.6.0"
 
 [libraries]
 androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
@@ -35,6 +37,7 @@ androidx-navigation-fragment-ktx = "androidx.navigation:navigation-fragment-ktx:
 androidx-navigation-ui-ktx = "androidx.navigation:navigation-ui-ktx:2.8.4"
 animatedBottomBar = { group = "nl.joery.animatedbottombar", name = "library", version.ref = "animatedBottomBar" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+car-ui-lib-v250 = { module = "com.android.car.ui:car-ui-lib", version.ref = "carUiLibVersion" }
 firebase-auth-v2101 = { module = "com.google.firebase:firebase-auth", version.ref = "googleFirebaseAuth" }
 firebase-auth-v2103 = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuthVersion" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
@@ -56,6 +59,7 @@ androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview"
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
+car-ui-lib = { group = "com.android.car.ui", name = "car-ui-lib", version.ref = "carUiLib" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

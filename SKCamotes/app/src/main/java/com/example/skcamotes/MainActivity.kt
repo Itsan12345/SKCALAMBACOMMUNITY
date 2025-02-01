@@ -6,6 +6,10 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.skcamotes.RequestFeature.EquipmentsFragment
+import com.example.skcamotes.RequestFeature.RequestFragment
+import com.example.skcamotes.RequestFeature.SchoolSuppliesFragment
+import com.example.skcamotes.RequestFeature.SportsFragment
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
 class MainActivity : AppCompatActivity(), RequestFragment.OnFragmentInteractionListener {

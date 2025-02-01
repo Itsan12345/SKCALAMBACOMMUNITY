@@ -24,6 +24,12 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".FirebaseRealTimeDatabaseApp"
+            android:exported="false" />
+        <activity
+            android:name=".RequestFeature.RequestActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProfileActivity"
             android:exported="false" />
         <activity
