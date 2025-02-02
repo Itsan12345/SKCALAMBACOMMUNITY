@@ -1,7 +1,11 @@
 package com.example.skcamotes
 
+import android.graphics.Color
+import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +14,13 @@ import android.widget.ImageButton
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointForward
-import com.google.android.material.datepicker.MaterialDatePicker
-import android.widget.CalendarView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.appcompat.widget.Toolbar
+import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import com.prolificinteractive.materialcalendarview.DayViewDecorator
+import com.prolificinteractive.materialcalendarview.DayViewFacade
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,15 +33,15 @@ class ReservationBookingFragment : Fragment() {
     private lateinit var paymentMethodGroup: RadioGroup
     private lateinit var totalPriceText: TextView
     private lateinit var bookNowButton: Button
-    private lateinit var calendarView: CalendarView
+    private lateinit var calendarView: MaterialCalendarView
+    private lateinit var toolbar: Toolbar
 
-    private var guestsCount = 0
+    private var guestsCount = 1
     private val basePricePerGuest = 150
     private var totalPrice = basePricePerGuest * guestsCount
 
-    private var startDate: Long? = null
-    private var endDate: Long? = null
-    private var firstClickTime: Long = 0
+    private var startDate: CalendarDay? = null
+    private var endDate: CalendarDay? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,22 +57,14 @@ class ReservationBookingFragment : Fragment() {
         totalPriceText = view.findViewById(R.id.total_price)
         bookNowButton = view.findViewById(R.id.book_now_button)
         calendarView = view.findViewById(R.id.calendar_view)
+        toolbar = view.findViewById(R.id.toolbar) // Find the toolbar
 
         // Retrieve the passed gym title
         val gymTitle = arguments?.getString("GYM_TITLE") ?: "Default Subtitle"
-
-
-        // Find the Toolbar (or any element with app:subtitle)
-        val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        toolbar.subtitle = gymTitle
-
+        toolbar.subtitle = gymTitle // Set subtitle
 
         updateGuestsAndPrice()
-
-        // Date picker (for range)
-        view.findViewById<TextView>(R.id.select_booking_dates).setOnClickListener {
-            showDateRangePicker()
-        }
+        setupCalendarView()
 
         // Guest count buttons
         decreaseGuests.setOnClickListener {
@@ -82,65 +81,49 @@ class ReservationBookingFragment : Fragment() {
 
         // Booking button
         bookNowButton.setOnClickListener {
-            // Get the subtitle from the toolbar
-            val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-            val gymTitle = toolbar.subtitle.toString() // Get the subtitle text
-
-            // Get the selected date range text
-            val dateRange = dateRangeDisplay.text.toString()
-
-            // Replace the current fragment with ReservationReceiptFragment and pass the subtitle
-            val transaction = parentFragmentManager.beginTransaction()
-            val reservationReceiptFragment = ReservationReceiptFragment()
-
-            // Pass the necessary data (guestsCount, gymTitle, dateRange, and totalPrice) as arguments
-            val bundle = Bundle()
-            bundle.putString("GYM_TITLE", gymTitle)
-            bundle.putString("DATE_RANGE", dateRange)
-            bundle.putInt("GUESTS_COUNT", guestsCount)  // Pass the guestsCount value here
-            bundle.putString("TOTAL_PRICE", totalPriceText.text.toString())  // Pass the total price
-            reservationReceiptFragment.arguments = bundle
-
-            transaction.replace(R.id.fragment_container, reservationReceiptFragment)
-            transaction.addToBackStack(null) // Optional: adds the transaction to back stack
-            transaction.commit()
-
-            val selectedPaymentMethod = view.findViewById<RadioButton>(paymentMethodGroup.checkedRadioButtonId)?.text
-                ?: "No Payment Method Selected"
-            showBookingSummary(selectedPaymentMethod)
-        }
-
-
-
-
-        // CalendarView for selecting start and end date
-        calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
-            val selectedDate = Calendar.getInstance().apply {
-                set(year, month, dayOfMonth)
-            }.timeInMillis
-
-            if (firstClickTime == 0L) {
-                firstClickTime = System.currentTimeMillis()
-                startDate = selectedDate
-                // Display single selected date
-                dateRangeDisplay.text = "Start Date: ${formatDate(startDate)}"
+            if (startDate != null && endDate != null) {
+                val selectedPaymentMethod = view.findViewById<RadioButton>(paymentMethodGroup.checkedRadioButtonId)?.text
+                    ?: "No Payment Method Selected"
+                showBookingSummary(selectedPaymentMethod)
+                goToReservationReceiptFragment()
             } else {
-                // Check if clicked within a short time for second click
-                if (System.currentTimeMillis() - firstClickTime < 1000) {
-                    endDate = selectedDate
-                    // Update text to show both start and end date
-                    dateRangeDisplay.text = "From: ${formatDate(startDate)}\nTo: ${formatDate(endDate)}"
-                    firstClickTime = 0L // Reset for next selection
-                } else {
-                    startDate = selectedDate
-                    // Display only the new selected start date
-                    dateRangeDisplay.text = "Start Date: ${formatDate(startDate)}"
-                    firstClickTime = System.currentTimeMillis()
-                }
+                dateRangeDisplay.text = "Please select dates"
             }
         }
 
         return view
+    }
+
+    private fun setupCalendarView() {
+        calendarView.setOnDateChangedListener { _, date, selected ->
+            if (selected) {
+                if (startDate == null) {
+                    startDate = date
+                    endDate = null
+                } else if (endDate == null && date.isAfter(startDate!!)) {
+                    endDate = date
+                } else {
+                    startDate = date
+                    endDate = null
+                }
+                updateDateRangeDisplay()
+                updateCalendarDecorator()
+            }
+        }
+    }
+
+    private fun updateDateRangeDisplay() {
+        val fromText = startDate?.let { "From: ${formatDate(it.date)}" } ?: "From: -"
+        val toText = endDate?.let { " To: ${formatDate(it.date)}" } ?: " To: -"
+        dateRangeDisplay.text = "$fromText$toText"
+    }
+
+    private fun updateCalendarDecorator() {
+        calendarView.removeDecorators()
+        if (startDate != null && endDate != null) {
+            calendarView.addDecorator(CustomDateDecorator(startDate, endDate))
+        }
+        calendarView.invalidate()
     }
 
     private fun updateGuestsAndPrice() {
@@ -149,36 +132,42 @@ class ReservationBookingFragment : Fragment() {
         totalPriceText.text = "₱$totalPrice"
     }
 
-    private fun showDateRangePicker() {
-        val constraintsBuilder = CalendarConstraints.Builder()
-            .setValidator(DateValidatorPointForward.now()) // Ensure dates are forward
-
-        val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
-            .setTitleText("Select Booking Dates")
-            .setCalendarConstraints(constraintsBuilder.build())
-            .build()
-
-        dateRangePicker.show(parentFragmentManager, "date_picker")
-
-        dateRangePicker.addOnPositiveButtonClickListener { dateRange ->
-            startDate = dateRange.first
-            endDate = dateRange.second
-
-            val formattedStartDate = formatDate(startDate)
-            val formattedEndDate = formatDate(endDate)
-
-            // Update the TextView with the selected date range
-            dateRangeDisplay.text = "From: $formattedStartDate\nTo: $formattedEndDate"
-        }
-    }
-
-    private fun formatDate(timestamp: Long?): String {
-        if (timestamp == null) return "--"
+    private fun formatDate(date: Date): String {
         val sdf = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
-        return sdf.format(Date(timestamp))
+        return sdf.format(date)
     }
 
     private fun showBookingSummary(paymentMethod: CharSequence) {
         println("Booking Summary: Guests: $guestsCount, Total Price: ₱$totalPrice, Payment: $paymentMethod")
+    }
+
+    private fun goToReservationReceiptFragment() {
+        val receiptFragment = ReservationReceiptFragment()
+
+        // Pass the necessary data (gymTitle, dateRange, guestsCount, and totalPrice) as arguments
+        val bundle = Bundle()
+        bundle.putString("GYM_TITLE", toolbar.subtitle.toString()) // Get subtitle from toolbar
+        bundle.putString("DATE_RANGE", dateRangeDisplay.text.toString())
+        bundle.putInt("GUESTS_COUNT", guestsCount)
+        bundle.putString("TOTAL_PRICE", totalPriceText.text.toString())
+        receiptFragment.arguments = bundle
+
+        val transaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, receiptFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+}
+
+// Custom Decorator for Highlighting Selected Dates
+class CustomDateDecorator(private val startDate: CalendarDay?, private val endDate: CalendarDay?) : DayViewDecorator {
+    override fun shouldDecorate(day: CalendarDay): Boolean {
+        return day.isInRange(startDate, endDate)
+    }
+
+    override fun decorate(view: DayViewFacade) {
+        view.addSpan(ForegroundColorSpan(Color.WHITE)) // Change text color
+        view.addSpan(StyleSpan(Typeface.BOLD)) // Make text bold
+        view.setSelectionDrawable(ColorDrawable(Color.RED)) // Change background color
     }
 }

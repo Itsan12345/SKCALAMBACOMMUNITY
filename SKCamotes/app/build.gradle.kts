@@ -71,4 +71,5 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation (libs.libphonenumber)
     implementation (libs.car.ui.lib.v250)
+    implementation ("com.prolificinteractive:material-calendarview:1.4.3")
 }

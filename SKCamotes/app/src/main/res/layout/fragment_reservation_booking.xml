@@ -42,17 +42,17 @@
         android:layout_marginTop="16dp" />
     <!-- Calendar View -->
 
-    <!-- Date Range Display -->
-    <CalendarView
+    <!-- Calendar View -->
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         android:id="@+id/calendar_view"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:layout_marginTop="16dp"
-        android:background="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/select_booking_dates" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/select_booking_dates"
+        app:mcv_showOtherDates="all"
+        app:mcv_tileSize="50dp" />
 
     <TextView
         android:id="@+id/date_range_display"
@@ -167,15 +167,7 @@
 
     </LinearLayout>
 
-    <RadioButton
-        android:id="@+id/gcash_payment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="GCash"
-        android:textColor="#000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/payment_method_title" />
+
 
     <TextView
         android:id="@+id/textView19"
