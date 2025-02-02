@@ -95,8 +95,21 @@ class ReservationBookingFragment : Fragment() {
     }
 
     private fun setupCalendarView() {
+        val today = CalendarDay.today() // Get current date
+        startDate = today // Set startDate to today by default
+        updateDateRangeDisplay()
+
+        // Set minimum date to today to prevent past date selection
+        calendarView.state().edit()
+            .setMinimumDate(today) // Disallow past dates
+            .commit()
+
         calendarView.setOnDateChangedListener { _, date, selected ->
             if (selected) {
+                if (date.isBefore(today)) {
+                    return@setOnDateChangedListener // Ignore past dates
+                }
+
                 if (startDate == null) {
                     startDate = date
                     endDate = null
@@ -110,6 +123,9 @@ class ReservationBookingFragment : Fragment() {
                 updateCalendarDecorator()
             }
         }
+
+        // Update calendar decorations
+        updateCalendarDecorator()
     }
 
     private fun updateDateRangeDisplay() {
@@ -168,6 +184,6 @@ class CustomDateDecorator(private val startDate: CalendarDay?, private val endDa
     override fun decorate(view: DayViewFacade) {
         view.addSpan(ForegroundColorSpan(Color.WHITE)) // Change text color
         view.addSpan(StyleSpan(Typeface.BOLD)) // Make text bold
-        view.setSelectionDrawable(ColorDrawable(Color.RED)) // Change background color
+        view.setSelectionDrawable(ColorDrawable(Color.parseColor("#9510D3"))) // Change background color
     }
 }
