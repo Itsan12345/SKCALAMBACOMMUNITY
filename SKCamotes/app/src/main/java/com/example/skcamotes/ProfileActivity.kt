@@ -3,7 +3,9 @@ package com.example.skcamotes
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -19,14 +21,31 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var nameTextView: TextView
     private lateinit var emailTextView: TextView
     private lateinit var signOutButton: Button
+    private lateinit var backButton: ImageButton
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var databaseReference: DatabaseReference
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+
+
+        // New containers
+        findViewById<LinearLayout>(R.id.personal_info_container).setOnClickListener {
+            // Navigate to Personal Information Activity
+        }
+
+        findViewById<LinearLayout>(R.id.password_security_container).setOnClickListener {
+            // Navigate to Password & Security Activity
+        }
+
+        findViewById<LinearLayout>(R.id.notifications_pref_container).setOnClickListener {
+            // Navigate to Notifications Preferences Activity
+        }
+
 
         // Initialize Firebase Auth and Google Sign-In Client
         auth = FirebaseAuth.getInstance()
@@ -42,6 +61,13 @@ class ProfileActivity : AppCompatActivity() {
         nameTextView = findViewById(R.id.name_text)
         emailTextView = findViewById(R.id.email_text)
         signOutButton = findViewById(R.id.btn_sign_out)
+        backButton = findViewById(R.id.back_button)
+
+
+        // Set the back button click listener
+        backButton.setOnClickListener {
+            onBackPressed()  // Go to the previous page
+        }
 
         // Initialize Firebase Database Reference
         databaseReference = FirebaseDatabase.getInstance(

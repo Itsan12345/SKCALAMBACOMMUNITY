@@ -69,6 +69,21 @@ class LoginPage : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        val user = auth.currentUser
+        if (user != null) {
+            if (user.email == ADMIN_EMAIL) {
+                startActivity(Intent(this, AdminPage::class.java))
+                Toast.makeText(this, "Welcome back, Admin!", Toast.LENGTH_SHORT).show()
+            } else {
+                startActivity(Intent(this, MainActivity::class.java))
+                Toast.makeText(this, "Welcome back!", Toast.LENGTH_SHORT).show()
+            }
+            finish()
+        }
+    }
+
     private fun validateInputs(email: String, password: String): Boolean {
         if (email.isEmpty()) {
             Toast.makeText(this, "Email cannot be empty", Toast.LENGTH_SHORT).show()

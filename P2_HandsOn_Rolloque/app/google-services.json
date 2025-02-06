@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "813041882525",
+    "firebase_url": "https://p2handson-c4bf0-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "p2handson-c4bf0",
+    "storage_bucket": "p2handson-c4bf0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813041882525:android:3aa20796632b2e7b9e8b74",
+        "android_client_info": {
+          "package_name": "com.example.p2_handson_ite393_rolloque"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE-Qwf3Pd6LhZZbRcU_vp6Ax_WdEMyPDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813041882525:android:c0155e93a1b869919e8b74",
+        "android_client_info": {
+          "package_name": "com.example.p2_handson_rolloque"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE-Qwf3Pd6LhZZbRcU_vp6Ax_WdEMyPDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
