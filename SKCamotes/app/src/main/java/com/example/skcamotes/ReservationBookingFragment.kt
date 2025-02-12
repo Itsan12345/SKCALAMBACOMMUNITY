@@ -1,8 +1,12 @@
 package com.example.skcamotes
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
+import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.Bundle
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
@@ -14,6 +18,8 @@ import android.widget.ImageButton
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.appcompat.widget.Toolbar
@@ -21,6 +27,13 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import android.util.Log
+import okhttp3.*
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.IOException
+import java.util.concurrent.TimeUnit
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -37,7 +50,7 @@ class ReservationBookingFragment : Fragment() {
     private lateinit var toolbar: Toolbar
 
     private var guestsCount = 1
-    private val basePricePerGuest = 150
+    private val basePricePerGuest = 50
     private var totalPrice = basePricePerGuest * guestsCount
 
     private var startDate: CalendarDay? = null
@@ -53,11 +66,26 @@ class ReservationBookingFragment : Fragment() {
         decreaseGuests = view.findViewById(R.id.decrease_guests)
         increaseGuests = view.findViewById(R.id.increase_guests)
         guestsCountText = view.findViewById(R.id.guests_count)
-        paymentMethodGroup = view.findViewById(R.id.payment_methods)
         totalPriceText = view.findViewById(R.id.total_price)
         bookNowButton = view.findViewById(R.id.book_now_button)
         calendarView = view.findViewById(R.id.calendar_view)
         toolbar = view.findViewById(R.id.toolbar) // Find the toolbar
+        val paymentMethodGroup = view.findViewById<RadioGroup>(R.id.payment_methods)
+        val radioCOD = view.findViewById<RadioButton>(R.id.radio_cod)
+        val radioGCash = view.findViewById<RadioButton>(R.id.radio_gcash)
+
+        // Handle payment selection
+        paymentMethodGroup.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.radio_cod -> {
+                    showToast("You selected COD. Please pay in cash in Barangay Calamba Finance.")
+                }
+
+                R.id.radio_gcash -> {
+                    showGcashPaymentDialog()
+                }
+            }
+        }
 
         // Retrieve the passed gym title
         val gymTitle = arguments?.getString("GYM_TITLE") ?: "Default Subtitle"
@@ -82,16 +110,45 @@ class ReservationBookingFragment : Fragment() {
         // Booking button
         bookNowButton.setOnClickListener {
             if (startDate != null && endDate != null) {
-                val selectedPaymentMethod = view.findViewById<RadioButton>(paymentMethodGroup.checkedRadioButtonId)?.text
-                    ?: "No Payment Method Selected"
+                val selectedRadioButtonId = paymentMethodGroup.checkedRadioButtonId
+                val selectedPaymentMethod = view.findViewById<RadioButton>(selectedRadioButtonId)?.text ?: "No Payment Method Selected"
+
                 showBookingSummary(selectedPaymentMethod)
-                goToReservationReceiptFragment()
+                goToReservationReceiptFragment(selectedPaymentMethod.toString())
             } else {
                 dateRangeDisplay.text = "Please select dates"
             }
         }
 
         return view
+    }
+
+    // Show GCash Payment Dialog
+    private fun showGcashPaymentDialog() {
+        val alertDialog = AlertDialog.Builder(requireContext())
+        alertDialog.setTitle("GCash Payment")
+        alertDialog.setMessage("Proceed to GCash payment?")
+        alertDialog.setPositiveButton("Pay Now") { _, _ ->
+            paywithGcash()
+        }
+        alertDialog.setNegativeButton("Cancel", null)
+        alertDialog.show()
+    }
+
+    private fun paywithGcash() {
+        val checkoutUrl = "https://pm.link/org-ethanrolloquepaymongo/test/fJCSXCi"
+        openCheckoutPage(checkoutUrl)
+    }
+
+    private fun openCheckoutPage(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
+    }
+
+
+    // Helper function to show toast messages
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun setupCalendarView() {
@@ -157,33 +214,31 @@ class ReservationBookingFragment : Fragment() {
         println("Booking Summary: Guests: $guestsCount, Total Price: ₱$totalPrice, Payment: $paymentMethod")
     }
 
-    private fun goToReservationReceiptFragment() {
-        val receiptFragment = ReservationReceiptFragment()
-
-        // Pass the necessary data (gymTitle, dateRange, guestsCount, and totalPrice) as arguments
-        val bundle = Bundle()
-        bundle.putString("GYM_TITLE", toolbar.subtitle.toString()) // Get subtitle from toolbar
-        bundle.putString("DATE_RANGE", dateRangeDisplay.text.toString())
-        bundle.putInt("GUESTS_COUNT", guestsCount)
-        bundle.putString("TOTAL_PRICE", totalPriceText.text.toString())
-        receiptFragment.arguments = bundle
-
-        val transaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, receiptFragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-}
-
-// Custom Decorator for Highlighting Selected Dates
-class CustomDateDecorator(private val startDate: CalendarDay?, private val endDate: CalendarDay?) : DayViewDecorator {
-    override fun shouldDecorate(day: CalendarDay): Boolean {
-        return day.isInRange(startDate, endDate)
+    private fun goToReservationReceiptFragment(paymentMethod: String) {
+        val intent = Intent(requireContext(), ReservationReceiptActivity::class.java).apply {
+            putExtra("GYM_TITLE", toolbar.subtitle.toString())
+            putExtra("DATE_RANGE", dateRangeDisplay.text.toString())
+            putExtra("GUESTS_COUNT", guestsCount)
+            putExtra("TOTAL_PRICE", totalPriceText.text.toString())
+            putExtra("PAYMENT_METHOD", paymentMethod) // Pass the selected payment method
+        }
+        startActivity(intent)
     }
 
-    override fun decorate(view: DayViewFacade) {
-        view.addSpan(ForegroundColorSpan(Color.WHITE)) // Change text color
-        view.addSpan(StyleSpan(Typeface.BOLD)) // Make text bold
-        view.setSelectionDrawable(ColorDrawable(Color.parseColor("#9510D3"))) // Change background color
+
+    // Custom Decorator for Highlighting Selected Dates
+    class CustomDateDecorator(
+        private val startDate: CalendarDay?,
+        private val endDate: CalendarDay?
+    ) : DayViewDecorator {
+        override fun shouldDecorate(day: CalendarDay): Boolean {
+            return day.isInRange(startDate, endDate)
+        }
+
+        override fun decorate(view: DayViewFacade) {
+            view.addSpan(ForegroundColorSpan(Color.WHITE)) // Change text color
+            view.addSpan(StyleSpan(Typeface.BOLD)) // Make text bold
+            view.setSelectionDrawable(ColorDrawable(Color.parseColor("#9510D3"))) // Change background color
+        }
     }
 }

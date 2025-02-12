@@ -72,4 +72,9 @@ dependencies {
     implementation (libs.libphonenumber)
     implementation (libs.car.ui.lib.v250)
     implementation ("com.prolificinteractive:material-calendarview:1.4.3")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.google.code.gson:gson:2.8.8")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation ("org.json:json:20210307")
 }
