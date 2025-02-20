@@ -29,7 +29,7 @@ import android.os.Looper
 class HomeFragment : Fragment() {
 
     private lateinit var announcementsRecyclerView: RecyclerView
-    private lateinit var announcementsAdapter: AnnouncementsAdapter
+    private lateinit var announcementsAdapter: HomeAnnouncementsAdapter
     private lateinit var databaseReference: DatabaseReference
 
     private lateinit var carouselRecyclerView: RecyclerView
@@ -79,7 +79,7 @@ class HomeFragment : Fragment() {
         // Announcements RecyclerView
         announcementsRecyclerView = view.findViewById(R.id.announcements_recyclerview)
         announcementsRecyclerView.layoutManager = LinearLayoutManager(context)
-        announcementsAdapter = AnnouncementsAdapter()
+        announcementsAdapter = HomeAnnouncementsAdapter()
         announcementsRecyclerView.adapter = announcementsAdapter
 
         // Firebase Database reference

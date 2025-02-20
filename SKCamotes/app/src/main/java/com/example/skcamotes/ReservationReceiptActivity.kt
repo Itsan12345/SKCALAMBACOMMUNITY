@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 
 class ReservationReceiptActivity : AppCompatActivity() {
 
@@ -17,10 +17,25 @@ class ReservationReceiptActivity : AppCompatActivity() {
     private lateinit var homeButton: Button
 
     private lateinit var database: DatabaseReference
+    private lateinit var userDatabase: DatabaseReference
+
+    private lateinit var auth: FirebaseAuth
+    private var userName: String = ""
+    private var userEmail: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_reservation_receipt) // Keeping the same layout
+        setContentView(R.layout.fragment_reservation_receipt)
+
+        // Initialize Firebase Auth and Database references
+        auth = FirebaseAuth.getInstance()
+        val userId = auth.currentUser?.uid
+
+        database = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference("reservationreceipt")
+
+        userDatabase = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference("Users")
 
         // Initialize UI components
         placenameValue = findViewById(R.id.placename_value)
@@ -29,10 +44,6 @@ class ReservationReceiptActivity : AppCompatActivity() {
         totalPriceValue = findViewById(R.id.totalprice_value)
         homeButton = findViewById(R.id.home_button)
         val paymentMethodValue = findViewById<TextView>(R.id.payment_method_value)
-
-        // Initialize Firebase Database reference
-        database = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app")
-            .getReference("reservationreceipt")
 
         // Retrieve the passed data from Intent extras
         val gymTitle = intent.getStringExtra("GYM_TITLE") ?: "Default Subtitle"
@@ -46,10 +57,15 @@ class ReservationReceiptActivity : AppCompatActivity() {
         dateValue.text = dateRange
         personValueText.text = "$guestsCount Guest(s)"
         totalPriceValue.text = totalPrice
-        paymentMethodValue.text = paymentMethod // Set selected payment method
+        paymentMethodValue.text = paymentMethod
 
-        // Save reservation data to Firebase
-        saveToFirebase(gymTitle, dateRange, guestsCount, totalPrice, paymentMethod)
+        // Fetch user details from Firebase
+        if (userId != null) {
+            fetchUserDetails(userId) {
+                // Save reservation data to Firebase after fetching user details
+                saveToFirebase(gymTitle, dateRange, guestsCount, totalPrice, paymentMethod)
+            }
+        }
 
         // Home button click listener to navigate back to MainActivity
         homeButton.setOnClickListener {
@@ -59,13 +75,29 @@ class ReservationReceiptActivity : AppCompatActivity() {
         }
     }
 
+    private fun fetchUserDetails(userId: String, onComplete: () -> Unit) {
+        userDatabase.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                userName = snapshot.child("name").getValue(String::class.java) ?: "Unknown User"
+                userEmail = snapshot.child("email").getValue(String::class.java) ?: "Unknown Email"
+                onComplete()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                println("Error fetching user details: ${error.message}")
+            }
+        })
+    }
+
     private fun saveToFirebase(place: String, date: String, persons: Int, total: String, paymentMethod: String) {
         val reservationData = mapOf(
             "place_reserved" to place,
             "date" to date,
             "number_of_persons" to persons,
             "total_price" to total,
-            "payment_method" to paymentMethod // Include payment method
+            "payment_method" to paymentMethod,
+            "user_name" to userName,
+            "user_email" to userEmail
         )
 
         // Push the data to Firebase with a unique key

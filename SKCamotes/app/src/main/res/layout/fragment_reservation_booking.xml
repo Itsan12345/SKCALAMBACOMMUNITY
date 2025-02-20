@@ -3,13 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@drawable/booking_bg">
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAF3F3">
+   >
 
     <!-- Toolbar -->
 
@@ -35,14 +36,14 @@
         android:id="@+id/select_booking_dates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:text="Select Booking Dates"
-        android:textColor="#000"
+        android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
     <!-- Calendar View -->
 
     <!-- Calendar View -->
@@ -50,11 +51,15 @@
         android:id="@+id/calendar_view"
         android:layout_width="match_parent"
         android:layout_height="350dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/cardview_outline"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/select_booking_dates"
         app:mcv_showOtherDates="all"
-        app:mcv_tileSize="50dp" />
+        app:mcv_tileSize="48dp" />
 
     <TextView
         android:id="@+id/date_range_display"
@@ -76,7 +81,7 @@
         android:id="@+id/guests_selector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="14dp"
         android:layout_marginEnd="68dp"
         android:gravity="center"
         android:orientation="horizontal"
@@ -86,8 +91,8 @@
         <ImageButton
             android:id="@+id/decrease_guests"
             android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:backgroundTint="@color/purple_700"
+            android:layout_height="43dp"
+            android:background="@drawable/users_cardview"
             android:contentDescription="Decrease Guests"
             android:src="@drawable/ic_remove" />
 
@@ -105,10 +110,10 @@
         <ImageButton
             android:id="@+id/increase_guests"
             android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:backgroundTint="@color/purple_700"
+            android:layout_height="43dp"
+            android:background="@drawable/users_cardview"
             android:contentDescription="Increase Guests"
-            android:src="@drawable/ic_add" />
+            android:src="@drawable/add_icon" />
 
     </LinearLayout>
 
@@ -117,7 +122,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="18dp"
         android:text="How would you like to pay?"
         android:textColor="#000"
         android:textSize="16sp"

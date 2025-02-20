@@ -20,7 +20,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var profileImageView: ImageView
     private lateinit var nameTextView: TextView
     private lateinit var emailTextView: TextView
-    private lateinit var signOutButton: Button
+    private lateinit var signOutButton: LinearLayout
     private lateinit var backButton: ImageButton
 
     private lateinit var auth: FirebaseAuth
@@ -33,17 +33,20 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
 
 
-        // New containers
-        findViewById<LinearLayout>(R.id.personal_info_container).setOnClickListener {
-            // Navigate to Personal Information Activity
+        findViewById<LinearLayout>(R.id.notifications_container).setOnClickListener {
+            startActivity(Intent(this, NotificationActivity::class.java))
         }
 
-        findViewById<LinearLayout>(R.id.password_security_container).setOnClickListener {
-            // Navigate to Password & Security Activity
+        findViewById<LinearLayout>(R.id.changepass_container).setOnClickListener {
+            startActivity(Intent(this, ChangePasswordActivity::class.java))
         }
 
-        findViewById<LinearLayout>(R.id.notifications_pref_container).setOnClickListener {
-            // Navigate to Notifications Preferences Activity
+        findViewById<LinearLayout>(R.id.report_issue_container).setOnClickListener {
+            startActivity(Intent(this, ReportIssueActivity::class.java))
+        }
+
+        findViewById<LinearLayout>(R.id.sign_out).setOnClickListener {
+            signOut()
         }
 
 
@@ -60,7 +63,7 @@ class ProfileActivity : AppCompatActivity() {
         profileImageView = findViewById(R.id.profile_image)
         nameTextView = findViewById(R.id.name_text)
         emailTextView = findViewById(R.id.email_text)
-        signOutButton = findViewById(R.id.btn_sign_out)
+        signOutButton = findViewById(R.id.sign_out)
         backButton = findViewById(R.id.back_button)
 
 
@@ -93,10 +96,6 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
 
-        // Set the Sign Out button click listener
-        signOutButton.setOnClickListener {
-            signOut()
-        }
     }
 
     private fun fetchUserData(email: String) {

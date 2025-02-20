@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -32,15 +33,12 @@ class ThirdFloorShowcaseFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Find the CheckBox by its ID and set up listener
-        val heartRadioButton = view.findViewById<CheckBox>(R.id.heart_radio_button)
-        heartRadioButton.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                Toast.makeText(requireContext(), "Added to favorites", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(requireContext(), "Removed from favorites", Toast.LENGTH_SHORT).show()
-            }
+        // Handle back button click
+        val btnBack = view.findViewById<ImageButton>(R.id.btn_back)
+        btnBack.setOnClickListener {
+            requireActivity().onBackPressed() // Navigates to the previous page
         }
+
 
         // Set up the MapView
         mapView = view.findViewById(R.id.thirdfloor_map_view)

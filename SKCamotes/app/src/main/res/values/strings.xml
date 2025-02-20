@@ -3,6 +3,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="msg_token_fmt">cXW5fp7VTTC9lSWEpPkJEX:APA91bH1EdVHXzNR60YLxNksXpoQ9o3mlMX2woHIGLgmQC3J6W_3kBd21I4RIi1lb8V8cHtCM8g5Y5-bAfrvv5aztTfW9MLQR3caw_HGIs874E4hqQ14Ilo</string>
+
     <string name="carousel_image">Carousel Image</string>
 
     <string name="left_arrow">Left Arrow</string>

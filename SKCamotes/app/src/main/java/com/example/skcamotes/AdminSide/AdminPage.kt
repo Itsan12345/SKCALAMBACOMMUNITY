@@ -33,6 +33,10 @@ class AdminPage : AppCompatActivity() {
         val viewPager = findViewById<androidx.viewpager2.widget.ViewPager2>(R.id.viewpager)
         val adapter = AdminPagerAdapter(this)
         viewPager.adapter = adapter
+
+        // Set TabLayout to scrollable mode
+        tabLayout.tabMode = TabLayout.MODE_SCROLLABLE
+
         val tabTitles = arrayOf("Users", "Announcements", "Requests", "Reservations")
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = tabTitles[position]

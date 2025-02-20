@@ -1,70 +1,190 @@
 package com.example.skcamotes
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.skcamotes.AdminSide.Announcement
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.database.*
+import com.google.firebase.messaging.FirebaseMessaging
 
 class AnnouncementsFragment : Fragment() {
 
-    private lateinit var editTextTitle: EditText
-    private lateinit var editTextContent: EditText
-    private lateinit var buttonPostAnnouncement: Button
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: AnnouncementsAdapter
     private lateinit var databaseReference: DatabaseReference
+    private lateinit var fabAddAnnouncement: FloatingActionButton
+
+    private val CHANNEL_ID = "announcement_channel"
+    private val NOTIFICATION_ID = 1
+
+    companion object {
+        private const val NOTIFICATION_PERMISSION_REQUEST_CODE = 101
+    }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_admin_announcements, container, false)
 
-        // Initialize UI elements
-        editTextTitle = view.findViewById(R.id.editTextTitle)
-        editTextContent = view.findViewById(R.id.editTextContent)
-        buttonPostAnnouncement = view.findViewById(R.id.buttonPostAnnouncement)
+        recyclerView = view.findViewById(R.id.recyclerViewAnnouncements)
+        fabAddAnnouncement = view.findViewById(R.id.fabAddAnnouncement)
 
-        // Initialize Firebase Realtime Database reference
-        databaseReference = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/").reference.child("announcements")
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        adapter = AnnouncementsAdapter()
+        recyclerView.adapter = adapter
 
-        // Set click listener for posting the announcement
-        buttonPostAnnouncement.setOnClickListener {
-            val title = editTextTitle.text.toString().trim()
-            val content = editTextContent.text.toString().trim()
+        // Initialize Firebase Database Reference
+        databaseReference = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/")
+            .reference.child("announcements")
 
-            if (title.isNotEmpty() && content.isNotEmpty()) {
-                postAnnouncement(title, content)
-            } else {
-                Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+        // Load announcements from Firebase
+        loadAnnouncements()
+
+        // Floating Action Button Click
+        fabAddAnnouncement.setOnClickListener { showAddAnnouncementDialog() }
+
+        // Subscribe to Notifications
+        FirebaseMessaging.getInstance().subscribeToTopic("announcements")
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(context, "Subscribed to notifications", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "Subscription failed", Toast.LENGTH_SHORT).show()
+                }
             }
-        }
+
+        createNotificationChannel()
 
         return view
     }
 
+    private fun loadAnnouncements() {
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val announcementList = mutableListOf<Announcement>()
+                for (data in snapshot.children) {
+                    val announcement = data.getValue(Announcement::class.java)
+                    if (announcement != null) {
+                        announcementList.add(announcement)
+                    }
+                }
+                adapter.submitList(announcementList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context, "Failed to load announcements", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     private fun postAnnouncement(title: String, content: String) {
-        // Create a map with the announcement data
-        val announcementData = hashMapOf(
+        val announcementData = mapOf(
             "title" to title,
             "content" to content,
-            "timestamp" to System.currentTimeMillis() // Save timestamp in milliseconds
+            "timestamp" to System.currentTimeMillis()
         )
 
-        // Push data to Firebase Database
-        val newAnnouncementRef = databaseReference.push() // Generate a unique ID
+        // Push announcement to Firebase
+        val newAnnouncementRef = databaseReference.push()
         newAnnouncementRef.setValue(announcementData)
             .addOnSuccessListener {
                 Toast.makeText(context, "Announcement posted successfully", Toast.LENGTH_SHORT).show()
-                editTextTitle.text.clear()
-                editTextContent.text.clear()
+                showLocalNotification(title, content)
             }
             .addOnFailureListener {
                 Toast.makeText(context, "Failed to post announcement", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun showAddAnnouncementDialog() {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_announcement, null)
+        val editTextDialogTitle: EditText = dialogView.findViewById(R.id.editTextDialogTitle)
+        val editTextDialogContent: EditText = dialogView.findViewById(R.id.editTextDialogContent)
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Add Announcement")
+            .setView(dialogView)
+            .setPositiveButton("Submit") { _, _ ->
+                val title = editTextDialogTitle.text.toString().trim()
+                val content = editTextDialogContent.text.toString().trim()
+                if (title.isNotEmpty() && content.isNotEmpty()) {
+                    postAnnouncement(title, content)
+                } else {
+                    Toast.makeText(context, "Please enter both title and content", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun showLocalNotification(title: String, content: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), NOTIFICATION_PERMISSION_REQUEST_CODE)
+                return
+            }
+        }
+
+        val notificationBuilder = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(title)
+            .setContentText(content)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(requireContext())) {
+            notify(NOTIFICATION_ID, notificationBuilder.build())
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == NOTIFICATION_PERMISSION_REQUEST_CODE) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                Toast.makeText(context, "Notification permission granted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Notification permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelName = "Announcements"
+            val descriptionText = "Channel for announcement notifications"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(CHANNEL_ID, channelName, importance).apply {
+                description = descriptionText
+            }
+
+            val notificationManager: NotificationManager =
+                requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 }

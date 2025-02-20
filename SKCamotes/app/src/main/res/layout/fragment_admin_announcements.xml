@@ -4,37 +4,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".AnnouncementsFragment">
 
-    <EditText
-        android:id="@+id/editTextTitle"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewAnnouncements"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Enter Title"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:padding="16dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextContent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Enter Content"
-        app:layout_constraintTop_toBottomOf="@id/editTextTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:padding="16dp" />
-
-    <Button
-        android:id="@+id/buttonPostAnnouncement"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddAnnouncement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Post Announcement"
-        app:layout_constraintTop_toBottomOf="@id/editTextContent"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp"
-        android:padding="16dp" />
+        android:contentDescription="Add Announcement" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

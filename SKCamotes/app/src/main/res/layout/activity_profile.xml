@@ -118,19 +118,19 @@
 
             <!-- Account Settings Label -->
             <TextView
-                android:id="@+id/account_settings_label"
+                android:id="@+id/general_settings_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginBottom="8dp"
-                android:text="Account Settings"
+                android:text="General"
                 android:textColor="#979797"
                 android:textSize="15sp" />
 
             <!-- Personal Information -->
             <LinearLayout
-                android:id="@+id/personal_info_container"
+                android:id="@+id/notifications_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
@@ -141,80 +141,32 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/profile_icon" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:text="Personal Information"
-                    android:textColor="#000000"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <!-- Password & Security -->
-            <LinearLayout
-                android:id="@+id/password_security_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_lock" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:text="Password and Security"
-                    android:textColor="#000000"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <!-- Notifications Preferences -->
-            <LinearLayout
-                android:id="@+id/notifications_pref_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
                     android:src="@drawable/ic_notification" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="Notifications Preferences"
+                    android:text="Notifications"
                     android:textColor="#000000"
                     android:textSize="16sp" />
-
             </LinearLayout>
+
 
             <!-- Account Settings Label -->
             <TextView
-                android:id="@+id/others_label"
+                android:id="@+id/help_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginBottom="8dp"
-                android:text="Others"
+                android:text="Help"
                 android:textColor="#979797"
                 android:textSize="15sp" />
 
             <LinearLayout
-                android:id="@+id/faq_container"
+                android:id="@+id/changepass_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
@@ -224,20 +176,20 @@
 
                 <ImageView
                     android:layout_width="24dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/faq_ic" />
+                    android:layout_height="25dp"
+                    android:src="@drawable/ic_changepass" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="FAQ"
+                    android:text="Change Password"
                     android:textColor="#000000"
                     android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/help_center_container"
+                android:id="@+id/report_issue_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
@@ -254,28 +206,37 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="Help Center"
+                    android:text="Report Issue"
                     android:textColor="#000000"
                     android:textSize="16sp" />
             </LinearLayout>
 
 
-            <!-- Sign Out Button -->
-            <Button
-                android:id="@+id/btn_sign_out"
+            <LinearLayout
+                android:id="@+id/sign_out"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="110dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/button_background"
-                android:backgroundTint="@color/purple_700"
-                android:text="Sign Out"
-                android:textColor="#FFFFFF"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView3" />
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_logout" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Logout"
+                    android:textColor="#BD0000"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+
+            <!-- Sign Out Button -->
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

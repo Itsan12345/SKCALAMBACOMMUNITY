@@ -74,6 +74,12 @@ class ReservationBookingFragment : Fragment() {
         val radioCOD = view.findViewById<RadioButton>(R.id.radio_cod)
         val radioGCash = view.findViewById<RadioButton>(R.id.radio_gcash)
 
+        // Set toolbar navigation icon and handle back navigation
+        toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_back, null)
+        toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressed() // Go back to the previous activity/screen
+        }
+
         // Handle payment selection
         paymentMethodGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
@@ -186,9 +192,10 @@ class ReservationBookingFragment : Fragment() {
     }
 
     private fun updateDateRangeDisplay() {
-        val fromText = startDate?.let { "From: ${formatDate(it.date)}" } ?: "From: -"
-        val toText = endDate?.let { " To: ${formatDate(it.date)}" } ?: " To: -"
+        val fromText = startDate?.let { " ${formatDate(it.date)}" } ?: "From: -"
+        val toText = endDate?.let { " - ${formatDate(it.date)}" } ?: " To: -"
         dateRangeDisplay.text = "$fromText$toText"
+        updateGuestsAndPrice() // Update total price when the date range is changed
     }
 
     private fun updateCalendarDecorator() {
@@ -201,9 +208,22 @@ class ReservationBookingFragment : Fragment() {
 
     private fun updateGuestsAndPrice() {
         guestsCountText.text = guestsCount.toString()
-        totalPrice = guestsCount * basePricePerGuest
+
+        // Calculate the number of reserved days
+        val numberOfDaysReserved = if (startDate != null && endDate != null) {
+            val startDateMillis = startDate!!.date.time
+            val endDateMillis = endDate!!.date.time
+            val diffInMillis = endDateMillis - startDateMillis
+            TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS).toInt() + 1
+        } else {
+            1 // Default to 1 day if no date range is selected
+        }
+
+        // Update total price formula: guests * number of days reserved
+        totalPrice = guestsCount * numberOfDaysReserved * basePricePerGuest
         totalPriceText.text = "₱$totalPrice"
     }
+
 
     private fun formatDate(date: Date): String {
         val sdf = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())

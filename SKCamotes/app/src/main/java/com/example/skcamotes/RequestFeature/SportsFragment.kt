@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.skcamotes.R
 
-class SportsFragment : Fragment() {
+class   SportsFragment : Fragment() {
     private var selectedDrawable: Int? = null
     private var selectedItemName: String? = null
 

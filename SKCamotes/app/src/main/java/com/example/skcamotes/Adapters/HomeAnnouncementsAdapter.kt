@@ -15,8 +15,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class AnnouncementsAdapter :
-    ListAdapter<Announcement, AnnouncementsAdapter.AnnouncementViewHolder>(DIFF_CALLBACK) {
+class HomeAnnouncementsAdapter :
+    ListAdapter<Announcement, HomeAnnouncementsAdapter.AnnouncementViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Announcement>() {
@@ -50,11 +50,6 @@ class AnnouncementsAdapter :
             titleTextView.text = announcement.title
             contentTextView.text = announcement.content
             dateTextView.text = formatRelativeTime(announcement.timestamp)
-
-            // Long-press listener for delete functionality
-            itemView.setOnLongClickListener {
-                showDeleteConfirmationDialog(announcement)
-                true
             }
         }
 
@@ -71,35 +66,6 @@ class AnnouncementsAdapter :
             }
         }
 
-        private fun showDeleteConfirmationDialog(announcement: Announcement) {
-            AlertDialog.Builder(itemView.context)
-                .setTitle("Delete Announcement")
-                .setMessage("Are you sure you want to delete this announcement?")
-                .setPositiveButton("Delete") { _, _ ->
-                    deleteAnnouncement(announcement)
-                }
-                .setNegativeButton("Cancel", null)
-                .show()
-        }
 
-        private fun deleteAnnouncement(announcement: Announcement) {
-            val databaseReference: DatabaseReference = FirebaseDatabase.getInstance(
-                "https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/"
-            ).reference.child("announcements")
-
-            // Query to find the announcement by timestamp
-            databaseReference.orderByChild("timestamp").equalTo(announcement.timestamp.toDouble())
-                .addListenerForSingleValueEvent(object : com.google.firebase.database.ValueEventListener {
-                    override fun onDataChange(snapshot: com.google.firebase.database.DataSnapshot) {
-                        for (dataSnapshot in snapshot.children) {
-                            dataSnapshot.ref.removeValue() // Remove the matching announcement
-                        }
-                    }
-
-                    override fun onCancelled(error: com.google.firebase.database.DatabaseError) {
-                        // Handle cancellation or errors here
-                    }
-                })
-        }
     }
-}
+

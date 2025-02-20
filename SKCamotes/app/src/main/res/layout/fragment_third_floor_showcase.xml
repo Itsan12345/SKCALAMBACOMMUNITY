@@ -7,6 +7,18 @@
     android:background="#FFFFFF">
 
     <!-- ScrollView Section -->
+    <ImageButton
+        android:id="@+id/btn_back2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_left_black" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -38,6 +50,8 @@
                 android:text="Third Floor Facility"
                 android:textColor="#000000"
                 android:textSize="24sp" />
+
+
 
             <TextView
                 android:id="@+id/gym_loc"
@@ -126,14 +140,17 @@
         android:padding="16dp"
         android:background="@drawable/rounded_corners_shadow">
 
-        <CheckBox
-            android:id="@+id/heart_radio_button"
+        <ImageButton
+            android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:button="@drawable/selector_heart"
-
-            android:contentDescription="Favorite" />
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:src="@drawable/ic_arrow_left_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/book_now_button"
