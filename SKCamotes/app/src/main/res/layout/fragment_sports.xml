@@ -95,7 +95,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginBottom="4dp"
             android:background="@android:color/transparent"
-            android:drawableStart="@drawable/ic_back_arrow"
+            android:drawableStart="@drawable/purple_back_icon"
             android:text="Back"
             android:textAllCaps="false"
             android:textColor="#A55A89"

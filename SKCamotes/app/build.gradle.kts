@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.firebase.database.ktx)
     implementation(libs.firebase.database)
     implementation(libs.car.ui.lib)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     implementation(libs.animatedBottomBar)
     implementation(libs.play.services.auth)
@@ -78,4 +79,7 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:4.9.1")
     implementation ("org.json:json:20210307")
     implementation ("com.google.firebase:firebase-messaging:23.1.1")
+    implementation ("com.android.volley:volley:1.2.1")
+    implementation ("com.sun.mail:android-mail:1.6.2")
+    implementation ("com.sun.mail:android-activation:1.6.2")
 }

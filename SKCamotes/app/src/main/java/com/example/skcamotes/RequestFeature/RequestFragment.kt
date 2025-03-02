@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.example.skcamotes.R
@@ -30,25 +31,25 @@ class RequestFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_requests, container, false)
 
         // Find the card_sports CardView and set an OnClickListener
-        val cardSports: CardView = view.findViewById(R.id.card_sports)
+        val cardSports: LinearLayout = view.findViewById(R.id.card_sports)
         cardSports.setOnClickListener {
             listener?.onCardSportsClicked() // Notify the listener
         }
 
         // Find the card_schoolsupp CardView and set an OnClickListener
-        val cardSchoolSupplies: CardView = view.findViewById(R.id.card_schoolsupp)
+        val cardSchoolSupplies: LinearLayout = view.findViewById(R.id.card_schoolsupp)
         cardSchoolSupplies.setOnClickListener {
             listener?.onCardSchoolSuppliesClicked() // Notify the listener
         }
 
         // Find the card_equipments CardView and set an OnClickListener
-        val cardEquipments: CardView = view.findViewById(R.id.card_equipments)
+        val cardEquipments: LinearLayout = view.findViewById(R.id.card_equipments)
         cardEquipments.setOnClickListener {
             listener?.onCardEquipmentsClicked() // Notify the listener
         }
 
         // Handle card_requests click to navigate to RequestActivity
-        val cardRequests: CardView = view.findViewById(R.id.card_requests)
+        val cardRequests: LinearLayout = view.findViewById(R.id.card_requests)
         cardRequests.setOnClickListener {
             val intent = Intent(requireContext(), RequestActivity::class.java)
             startActivity(intent)

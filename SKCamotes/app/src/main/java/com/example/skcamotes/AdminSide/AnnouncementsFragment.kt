@@ -175,11 +175,12 @@ class AnnouncementsFragment : Fragment() {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channelName = "Announcements"
-            val descriptionText = "Channel for announcement notifications"
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(CHANNEL_ID, channelName, importance).apply {
-                description = descriptionText
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                "Announcements",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Notifications for new announcements"
             }
 
             val notificationManager: NotificationManager =

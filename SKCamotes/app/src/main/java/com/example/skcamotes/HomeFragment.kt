@@ -205,25 +205,25 @@ class HomeFragment : Fragment() {
                 val announcementsList = mutableListOf<Announcement>()
                 for (dataSnapshot in snapshot.children) {
                     val announcement = dataSnapshot.getValue(Announcement::class.java)
-                    // Check if the announcement has valid data
                     if (announcement != null && announcement.title.isNotEmpty() && announcement.content.isNotEmpty()) {
                         announcementsList.add(announcement)
                     }
                 }
 
                 if (announcementsList.isNotEmpty()) {
+                    // Sort announcements by date in descending order
+                    announcementsList.sortByDescending { it.timestamp }
+
                     // Show RecyclerView with data
                     announcementsRecyclerView.visibility = View.VISIBLE
                     announcementsAdapter.submitList(announcementsList)
                 } else {
-                    // Hide RecyclerView and show a message indicating no data
                     announcementsRecyclerView.visibility = View.GONE
                     Toast.makeText(context, "No announcements available", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // If the operation is cancelled, check for Firebase authentication issues
                 if (auth.currentUser == null) {
                     Toast.makeText(context, "User signed out", Toast.LENGTH_SHORT).show()
                 } else {

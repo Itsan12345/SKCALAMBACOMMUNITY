@@ -1,5 +1,6 @@
 package com.example.skcamotes.AdminSide
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -135,11 +136,31 @@ class AdminRequestsFragment : Fragment() {
         acceptedRequestsRef.push().setValue(equipment)
             .addOnSuccessListener {
                 removeRequestFromDatabase(equipment)
-                showSuccessDialog("Equipment request accepted successfully.")
+                sendEmailNotification(user.email, equipment.itemName)
+                showSuccessDialog("Equipment request accepted successfully, and an email has been sent to ${user.email}.")
             }
             .addOnFailureListener {
                 showErrorDialog("Failed to accept the equipment request. Please try again.")
             }
+    }
+
+
+    private fun sendEmailNotification(userEmail: String, itemName: String) {
+        val subject = "Your Equipment Request Has Been Accepted"
+        val message = "Hello,\n\nYour request for the equipment '$itemName' has been accepted. Please coordinate for further details.\n\nThank you!"
+
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "message/rfc822"
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(userEmail))
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+            putExtra(Intent.EXTRA_TEXT, message)
+        }
+
+        try {
+            startActivity(Intent.createChooser(intent, "Send Email"))
+        } catch (e: Exception) {
+            showErrorDialog("No email app found. Please install an email client.")
+        }
     }
 
     private fun rejectEquipmentRequest(equipment: UserRequestedEquipment, user: AdminRequestDataClass) {
