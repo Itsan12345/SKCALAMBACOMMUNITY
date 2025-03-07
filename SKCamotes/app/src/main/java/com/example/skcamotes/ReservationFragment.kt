@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.viewpager2.widget.ViewPager2
 
@@ -14,6 +15,7 @@ class ReservationFragment : Fragment() {
     private lateinit var tvAll: TextView
     private lateinit var tvIndoor: TextView
     private lateinit var tvOutdoor: TextView
+    private lateinit var icHistory: ImageView // Added reference to icHistory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,6 +29,7 @@ class ReservationFragment : Fragment() {
         tvAll = view.findViewById(R.id.tvAll)
         tvIndoor = view.findViewById(R.id.tvIndoor)
         tvOutdoor = view.findViewById(R.id.tvOutdoor)
+        icHistory = view.findViewById(R.id.icHistory) // Initialize icHistory
 
         // Set up the ViewPager with a custom adapter
         val adapter = ReservationPagerAdapter(this)
@@ -44,6 +47,14 @@ class ReservationFragment : Fragment() {
         tvOutdoor.setOnClickListener {
             selectFilter(tvOutdoor)
             viewPager.currentItem = 2
+        }
+
+        // Handle click for icHistory to replace the fragment
+        icHistory.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.wrapper, Reservations_MyRoomsFragment()) // Replace with MyRoomsFragment
+                .addToBackStack(null)
+                .commit()
         }
 
         // Default selection

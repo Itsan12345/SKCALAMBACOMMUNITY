@@ -13,6 +13,15 @@
         <item name="android:textStyle">italic</item> <!-- Apply italic style -->
     </style>
 
+    <style name="BottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+
+    <style name="BottomSheetStyle">
+        <item name="android:background">@drawable/bottom_sheet_background</item>
+    </style>
+
+
     <style name="DotTabIndicator" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">#000000</item>
         <item name="tabIndicatorHeight">2dp</item>

@@ -86,6 +86,16 @@ class MainActivity : AppCompatActivity(), RequestFragment.OnFragmentInteractionL
         }
     }
 
+    fun openMyReservationsBrgyCalamba() {
+        val fragment = MyReservationsBrgyCalamba()
+        makeCurrentFragment(fragment)
+    }
+
+    fun openMyReservationsThirdFloorFacility() {
+        val fragment = MyReservationsThirdFloorFacility()
+        makeCurrentFragment(fragment)
+    }
+
     private fun makeCurrentFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.wrapper, fragment)
