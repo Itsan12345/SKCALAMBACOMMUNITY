@@ -15,13 +15,12 @@ class ReservationFragment : Fragment() {
     private lateinit var tvAll: TextView
     private lateinit var tvIndoor: TextView
     private lateinit var tvOutdoor: TextView
-    private lateinit var icHistory: ImageView // Added reference to icHistory
+    private lateinit var icHistory: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_reservations, container, false)
 
         // Initialize Views
@@ -29,30 +28,38 @@ class ReservationFragment : Fragment() {
         tvAll = view.findViewById(R.id.tvAll)
         tvIndoor = view.findViewById(R.id.tvIndoor)
         tvOutdoor = view.findViewById(R.id.tvOutdoor)
-        icHistory = view.findViewById(R.id.icHistory) // Initialize icHistory
+        icHistory = view.findViewById(R.id.icHistory)
 
-        // Set up the ViewPager with a custom adapter
         val adapter = ReservationPagerAdapter(this)
         viewPager.adapter = adapter
 
         // Set click listeners for TextView filters
         tvAll.setOnClickListener {
-            selectFilter(tvAll)
             viewPager.currentItem = 0
         }
         tvIndoor.setOnClickListener {
-            selectFilter(tvIndoor)
             viewPager.currentItem = 1
         }
         tvOutdoor.setOnClickListener {
-            selectFilter(tvOutdoor)
             viewPager.currentItem = 2
         }
+
+        // Sync filter highlight with page changes
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                when (position) {
+                    0 -> selectFilter(tvAll)
+                    1 -> selectFilter(tvIndoor)
+                    2 -> selectFilter(tvOutdoor)
+                }
+            }
+        })
 
         // Handle click for icHistory to replace the fragment
         icHistory.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.wrapper, Reservations_MyRoomsFragment()) // Replace with MyRoomsFragment
+                .replace(R.id.wrapper, Reservations_MyRoomsFragment())
                 .addToBackStack(null)
                 .commit()
         }
@@ -64,15 +71,12 @@ class ReservationFragment : Fragment() {
     }
 
     private fun selectFilter(selectedTextView: TextView) {
-        // Reset all filters to default style
         listOf(tvAll, tvIndoor, tvOutdoor).forEach {
             it.setTextColor(requireContext().getColor(R.color.gray))
             it.setBackgroundResource(R.drawable.unselected_filter_background)
         }
 
-        // Highlight the selected filter
         selectedTextView.setTextColor(requireContext().getColor(android.R.color.white))
         selectedTextView.setBackgroundResource(R.drawable.selected_filter_background)
     }
-
 }

@@ -28,7 +28,7 @@ class AcceptedRequestsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        holder.fullNameTextView.text = item.fullName
+        holder.fullNameTextView.text = item.userEmail
         holder.itemNameTextView.text = item.itemName
         holder.quantityTextView.text = item.quantity
         holder.dateTextView.text = item.selectedDate

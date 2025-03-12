@@ -86,6 +86,33 @@ class MainActivity : AppCompatActivity(), RequestFragment.OnFragmentInteractionL
         }
     }
 
+    fun navigateToFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+
+        bottomBar.selectTabAt(1, true) // Assuming RequestFragment is at index 1
+    }
+
+    fun navigateToFragment2(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+
+        bottomBar.selectTabAt(2, true) // Assuming RequestFragment is at index 1
+    }
+
+    fun navigateToFragment3(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+
+        bottomBar.selectTabAt(3, true) // Assuming RequestFragment is at index 1
+    }
+
     fun openMyReservationsBrgyCalamba() {
         val fragment = MyReservationsBrgyCalamba()
         makeCurrentFragment(fragment)

@@ -2,23 +2,25 @@ package com.example.skcamotes.AdminSide
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.example.skcamotes.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 
-class AdminPage : AppCompatActivity() {
+class AdminPage : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,25 +30,53 @@ class AdminPage : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         googleSignInClient = GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN)
 
-        // Set up TabLayout and ViewPager
-        val tabLayout = findViewById<TabLayout>(R.id.tablayoutcontainer)
-        val viewPager = findViewById<androidx.viewpager2.widget.ViewPager2>(R.id.viewpager)
-        val adapter = AdminPagerAdapter(this)
-        viewPager.adapter = adapter
+        // Set up the toolbar
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu) // Menu icon
 
-        // Set TabLayout to scrollable mode
-        tabLayout.tabMode = TabLayout.MODE_SCROLLABLE
+        // Initialize Drawer Layout and Navigation View
+        drawerLayout = findViewById(R.id.drawer_layout)
+        val navigationView = findViewById<NavigationView>(R.id.navigation_view)
+        navigationView.setNavigationItemSelectedListener(this)
 
-        val tabTitles = arrayOf("Users", "Announcements", "Requests", "Reservations")
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = tabTitles[position]
-        }.attach()
-
-        // Set up Logout button
-        val logoutButton: Button = findViewById(R.id.logout_button)
-        logoutButton.setOnClickListener {
-            showSignOutDialog()
+        // Load default fragment (Users)
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, UsersFragment())
+                .commit()
+            navigationView.setCheckedItem(R.id.nav_users)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                drawerLayout.openDrawer(GravityCompat.START)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_users -> switchFragment(UsersFragment())
+            R.id.nav_announcements -> switchFragment(AnnouncementsFragment())
+            R.id.nav_requests -> switchFragment(AdminRequestsFragment())
+            R.id.nav_requests_history -> switchFragment(AdminRequestedFragment())
+            R.id.nav_reservations -> switchFragment(AdminReservationsFragment())
+            R.id.nav_logout -> showSignOutDialog()
+        }
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+    private fun switchFragment(fragment: androidx.fragment.app.Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
     }
 
     private fun showSignOutDialog() {
@@ -59,24 +89,10 @@ class AdminPage : AppCompatActivity() {
                     val intent = Intent(this, LoginPage::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
-                    finish() // Close AdminPage
+                    finish()
                 }
             }
             .setNegativeButton("No", null)
             .show()
-    }
-}
-
-// Adapter to manage fragments for each tab
-class AdminPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
-    override fun getItemCount(): Int = 4 // Four tabs
-    override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> UsersFragment()
-            1 -> AnnouncementsFragment()
-            2 -> AdminRequestsFragment()
-            3 -> AdminReservationsFragment()
-            else -> throw IllegalArgumentException("Invalid position")
-        }
     }
 }

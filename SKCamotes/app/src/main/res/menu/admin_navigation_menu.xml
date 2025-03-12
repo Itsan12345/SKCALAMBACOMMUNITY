@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_users"
+        android:title="Users"
+        android:icon="@drawable/profile_icon" />
+    <item
+        android:id="@+id/nav_announcements"
+        android:title="Announcements"
+        android:icon="@drawable/ic_announcement" />
+    <item
+        android:id="@+id/nav_requests"
+        android:title="Requests"
+        android:icon="@drawable/requests_ic" />
+    <item
+        android:id="@+id/nav_requests_history"
+        android:title="Requests History"
+        android:icon="@drawable/ic_history" />
+    <item
+        android:id="@+id/nav_reservations"
+        android:title="Reservations"
+        android:icon="@drawable/reservation_ic" />
+    <item
+        android:id="@+id/nav_logout"
+        android:title="Logout"
+        android:icon="@drawable/ic_logout" />
+</menu>

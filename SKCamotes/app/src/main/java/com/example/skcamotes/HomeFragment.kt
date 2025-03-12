@@ -25,6 +25,10 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
+import com.example.skcamotes.RequestFeature.RequestFragment
 
 class HomeFragment : Fragment() {
 
@@ -38,7 +42,8 @@ class HomeFragment : Fragment() {
     private lateinit var profileButton: ImageButton
     private lateinit var layoutManager: CustomCarouselLayoutManager
     private lateinit var tabDots: TabLayout // TabLayout for dots
-
+    private lateinit var searchEditText: EditText
+    private var originalAnnouncementsList = mutableListOf<Announcement>()
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private val handler = Handler(Looper.getMainLooper())
@@ -68,6 +73,18 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
+
+        searchEditText = view.findViewById(R.id.et_search)
+
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                filterAnnouncements(s.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
 
         // Initialize FirebaseAuth and GoogleSignInClient
         auth = FirebaseAuth.getInstance()
@@ -106,7 +123,21 @@ class HomeFragment : Fragment() {
         layoutManager = CustomCarouselLayoutManager(requireContext())
         carouselRecyclerView.layoutManager = layoutManager
 
-        val carouselAdapter = CarouselAdapter(imageList)
+        val carouselAdapter = CarouselAdapter(imageList) { imageResId ->
+            if (imageResId == R.drawable.request_carouselbg) {
+                navigateToRequestFragment()
+            }
+
+            if (imageResId == R.drawable.reservation_carouselbg) {
+                navigateToReservationFragment()
+            }
+
+            if (imageResId == R.drawable.emergency_carouselbg) {
+                navigateToEmergencyFragment()
+            }
+
+        }
+
         carouselRecyclerView.adapter = carouselAdapter
 
         val snapHelper = LinearSnapHelper()
@@ -186,51 +217,59 @@ class HomeFragment : Fragment() {
         return view
     }
 
+
+    private fun navigateToEmergencyFragment() {
+        (activity as? MainActivity)?.navigateToFragment3(EmergenciesFragment())
+    }
+
+    private fun navigateToReservationFragment() {
+        (activity as? MainActivity)?.navigateToFragment2(ReservationFragment())
+    }
+
+
+    private fun navigateToRequestFragment() {
+        (activity as? MainActivity)?.navigateToFragment(RequestFragment())
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         handler.removeCallbacks(autoScrollRunnable) // Stop auto-scroll when fragment is destroyed
     }
 
     private fun fetchAnnouncements() {
-        // Check if the user is signed in
         val currentUser = auth.currentUser
         if (currentUser == null) {
-            // If no user is signed in, do not attempt to fetch announcements
             Toast.makeText(context, "User is not signed in. Please sign in again.", Toast.LENGTH_SHORT).show()
             return
         }
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val announcementsList = mutableListOf<Announcement>()
+                originalAnnouncementsList.clear()
                 for (dataSnapshot in snapshot.children) {
                     val announcement = dataSnapshot.getValue(Announcement::class.java)
-                    if (announcement != null && announcement.title.isNotEmpty() && announcement.content.isNotEmpty()) {
-                        announcementsList.add(announcement)
+                    if (announcement != null && announcement.title.isNotEmpty()) {
+                        originalAnnouncementsList.add(announcement)
                     }
                 }
 
-                if (announcementsList.isNotEmpty()) {
-                    // Sort announcements by date in descending order
-                    announcementsList.sortByDescending { it.timestamp }
-
-                    // Show RecyclerView with data
-                    announcementsRecyclerView.visibility = View.VISIBLE
-                    announcementsAdapter.submitList(announcementsList)
-                } else {
-                    announcementsRecyclerView.visibility = View.GONE
-                    Toast.makeText(context, "No announcements available", Toast.LENGTH_SHORT).show()
-                }
+                originalAnnouncementsList.sortByDescending { it.timestamp }
+                announcementsAdapter.submitList(originalAnnouncementsList)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                if (auth.currentUser == null) {
-                    Toast.makeText(context, "User signed out", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(context, "Failed to load data: ${error.message}", Toast.LENGTH_SHORT).show()
-                }
+                Toast.makeText(context, "Failed to load data: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+
+    private fun filterAnnouncements(query: String) {
+        val filteredList = originalAnnouncementsList.filter {
+            it.title.contains(query, ignoreCase = true) || it.content.contains(query, ignoreCase = true)
+        }
+
+        announcementsAdapter.submitList(filteredList)
     }
 
     private fun updateArrowVisibility(position: Int, itemCount: Int) {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ class Reservations_PendingFragment : Fragment() {
     private lateinit var databaseReference: DatabaseReference
     private lateinit var auth: FirebaseAuth
     private var userEmail: String? = null
+    private lateinit var emptyStateLayout: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,9 +31,10 @@ class Reservations_PendingFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerViewReservations)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         reservationList = mutableListOf()
-        reservationAdapter = PendingMyReservationAdapter(reservationList) {
-        }
+        reservationAdapter = PendingMyReservationAdapter(reservationList) {}
         recyclerView.adapter = reservationAdapter
+
+        emptyStateLayout = view.findViewById(R.id.emptyStateLayout)
 
         auth = FirebaseAuth.getInstance()
         userEmail = auth.currentUser?.email  // Get the logged-in user's email
@@ -65,6 +68,16 @@ class Reservations_PendingFragment : Fragment() {
                         reservationList.add(reservation)
                     }
                 }
+
+                // Show or hide empty state layout based on data availability
+                if (reservationList.isEmpty()) {
+                    emptyStateLayout.visibility = View.VISIBLE
+                    recyclerView.visibility = View.GONE
+                } else {
+                    emptyStateLayout.visibility = View.GONE
+                    recyclerView.visibility = View.VISIBLE
+                }
+
                 reservationAdapter.notifyDataSetChanged()
             }
 

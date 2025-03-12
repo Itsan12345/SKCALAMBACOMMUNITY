@@ -18,6 +18,7 @@ class AcceptedRequestsFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PendingRequestsAdapter
     private lateinit var database: DatabaseReference
+    private lateinit var emptyStateLayout: View
     private val itemList = mutableListOf<UserRequestsDataClass>()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
@@ -28,6 +29,7 @@ class AcceptedRequestsFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_accepted_requests, container, false)
 
         recyclerView = view.findViewById(R.id.recyclerView_accepted_requests)
+        emptyStateLayout = view.findViewById(R.id.emptyStateLayout) // Find the empty state layout
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter = PendingRequestsAdapter(itemList)
         recyclerView.adapter = adapter
@@ -82,6 +84,7 @@ class AcceptedRequestsFragment : Fragment() {
                     processSnapshot(snapshot)
                 } else {
                     Log.e("DEBUG", "No data found for UID: $userUid")
+                    toggleEmptyState(true)
                 }
             }
 
@@ -100,9 +103,17 @@ class AcceptedRequestsFragment : Fragment() {
                 Log.d("DEBUG", "Item added: $item")
             }
         }
-        if (itemList.isEmpty()) {
-            Log.d("DEBUG", "No items found for the user.")
-        }
         adapter.notifyDataSetChanged()
+        toggleEmptyState(itemList.isEmpty())
+    }
+
+    private fun toggleEmptyState(isEmpty: Boolean) {
+        if (isEmpty) {
+            recyclerView.visibility = View.GONE
+            emptyStateLayout.visibility = View.VISIBLE
+        } else {
+            recyclerView.visibility = View.VISIBLE
+            emptyStateLayout.visibility = View.GONE
+        }
     }
 }

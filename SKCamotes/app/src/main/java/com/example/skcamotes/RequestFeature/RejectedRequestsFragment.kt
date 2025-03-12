@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,7 @@ class RejectedRequestsFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PendingRequestsAdapter
     private lateinit var database: DatabaseReference
+    private lateinit var emptyStateLayout: LinearLayout
     private val itemList = mutableListOf<UserRequestsDataClass>()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
@@ -28,6 +30,7 @@ class RejectedRequestsFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_rejected_requests, container, false)
 
         recyclerView = view.findViewById(R.id.recyclerView_rejected_requests)
+        emptyStateLayout = view.findViewById(R.id.emptyStateLayout)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter = PendingRequestsAdapter(itemList)
         recyclerView.adapter = adapter
@@ -43,7 +46,7 @@ class RejectedRequestsFragment : Fragment() {
             database = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/")
                 .getReference("RejectedRequests")
 
-            fetchPendingRequests(userEmail, userUid)
+            fetchRejectedRequests(userEmail, userUid)
         } else {
             Log.e("DEBUG", "No authenticated user")
         }
@@ -51,7 +54,7 @@ class RejectedRequestsFragment : Fragment() {
         return view
     }
 
-    private fun fetchPendingRequests(userEmail: String?, userUid: String?) {
+    private fun fetchRejectedRequests(userEmail: String?, userUid: String?) {
         if (userEmail == null || userUid == null) {
             Log.e("DEBUG", "User email or UID is null")
             return
@@ -82,6 +85,7 @@ class RejectedRequestsFragment : Fragment() {
                     processSnapshot(snapshot)
                 } else {
                     Log.e("DEBUG", "No data found for UID: $userUid")
+                    updateEmptyState(true)
                 }
             }
 
@@ -100,9 +104,17 @@ class RejectedRequestsFragment : Fragment() {
                 Log.d("DEBUG", "Item added: $item")
             }
         }
-        if (itemList.isEmpty()) {
-            Log.d("DEBUG", "No items found for the user.")
-        }
         adapter.notifyDataSetChanged()
+        updateEmptyState(itemList.isEmpty())
+    }
+
+    private fun updateEmptyState(isEmpty: Boolean) {
+        if (isEmpty) {
+            recyclerView.visibility = View.GONE
+            emptyStateLayout.visibility = View.VISIBLE
+        } else {
+            recyclerView.visibility = View.VISIBLE
+            emptyStateLayout.visibility = View.GONE
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ import com.google.firebase.database.*
 class Reservations_CancelledFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var emptyStateLayout: LinearLayout
     private lateinit var reservationAdapter: CancelledReservationAdapter
     private lateinit var reservationList: MutableList<CancelledReservationDataClass>
     private lateinit var databaseReference: DatabaseReference
@@ -27,6 +29,8 @@ class Reservations_CancelledFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_reservations__cancelled, container, false)
 
         recyclerView = view.findViewById(R.id.recyclerViewCancelledReservations)
+        emptyStateLayout = view.findViewById(R.id.emptyStateLayout) // Empty state view
+
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         reservationList = mutableListOf()
         reservationAdapter = CancelledReservationAdapter(reservationList)
@@ -58,12 +62,22 @@ class Reservations_CancelledFragment : Fragment() {
                         reservation.number_of_persons > 0 &&
                         reservation.payment_method.isNotBlank() &&
                         reservation.total_price.isNotBlank() &&
-                        reservation.user_email == userEmail// Only show reservations of the logged-in user
+                        reservation.user_email == userEmail // Only show reservations of the logged-in user
                     ) {
                         reservationList.add(reservation)
                     }
                 }
+
                 reservationAdapter.notifyDataSetChanged()
+
+                // Show empty state if no reservations found
+                if (reservationList.isEmpty()) {
+                    emptyStateLayout.visibility = View.VISIBLE
+                    recyclerView.visibility = View.GONE
+                } else {
+                    emptyStateLayout.visibility = View.GONE
+                    recyclerView.visibility = View.VISIBLE
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {

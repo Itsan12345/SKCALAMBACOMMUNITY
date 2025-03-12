@@ -116,20 +116,20 @@
         <EditText
             android:id="@+id/etDescription"
             android:layout_width="match_parent"
-            android:layout_height="134dp"
+            android:layout_height="94dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/rounded_edittext"
-            android:hint="Description"
-            android:padding="12dp"
             android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:scrollbars="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionLabel" />
+            android:hint="Description"
+            android:inputType="textMultiLine"
+            android:padding="12dp"
+            android:scrollbars="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDescriptionLabel" />
 
 
         <!-- Phone Number Label -->
@@ -175,36 +175,40 @@
 
         <EditText
             android:id="@+id/etSelectDate"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
             android:background="@drawable/rounded_edittext"
             android:clickable="true"
             android:drawableEnd="@drawable/ic_arrow_down"
             android:focusable="false"
             android:hint="Select Date"
             android:padding="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvDateLabel" />
+
 
         <!-- Time Label -->
         <TextView
             android:id="@+id/tvTimeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="135dp"
             android:text="Time"
             android:textColor="@android:color/black"
             android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etPhoneNumber" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etSelectDate" />
 
         <EditText
             android:id="@+id/etSelectTime"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/rounded_edittext"
@@ -214,6 +218,7 @@
             android:hint="Select Time"
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTimeLabel" />
 
         <!-- Submit Button -->
@@ -237,13 +242,24 @@
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/rem_regular"
             android:text="Request Form"
             android:textColor="#000"
             android:textSize="25sp"
             android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/ic_back"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/ic_back"
+            android:layout_width="33dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

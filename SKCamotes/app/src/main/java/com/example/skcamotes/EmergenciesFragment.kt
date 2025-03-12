@@ -1,12 +1,15 @@
 package com.example.skcamotes
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.EditText
 import androidx.cardview.widget.CardView
+import android.widget.LinearLayout
 
 class EmergenciesFragment : Fragment() {
 
@@ -17,43 +20,54 @@ class EmergenciesFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_emergencies, container, false)
 
-        // Example: Button to replace the fragment
-        val PNPcalamba: CardView = view.findViewById(R.id.pnpcalamba)
-        PNPcalamba.setOnClickListener {
-            // Replace with another fragment, e.g., ExampleFragment
-            replaceFragment(PNPCalambaFragment())
-        }
+        val etSearch: EditText = view.findViewById(R.id.et_search)
+        val emergencyHotlines: LinearLayout = view.findViewById(R.id.emergency_hotlines)
 
-        val BFPcalamba: CardView = view.findViewById(R.id.bfpcalamba)
-        BFPcalamba.setOnClickListener {
-            // Replace with another fragment, e.g., ExampleFragment
-            replaceFragment(BFPCalambaFragment())
-        }   
+        // List of all CardViews (emergency hotlines)
+        val hotlines = listOf(
+            view.findViewById<CardView>(R.id.pnpcalamba),
+            view.findViewById<CardView>(R.id.bfpcalamba),
+            view.findViewById<CardView>(R.id.cmccalamba),
+            view.findViewById<CardView>(R.id.pamanacalamba),
+            view.findViewById<CardView>(R.id.calambadoctors),
+            view.findViewById<CardView>(R.id.jpcalamba)
+        )
 
-        val CMCCalamba: CardView = view.findViewById(R.id.cmccalamba)
-        CMCCalamba.setOnClickListener {
-            // Replace with another fragment, e.g., ExampleFragment
-            replaceFragment(CMCFragment())
-        }
+        val hotlineNames = listOf(
+            "PNP Calamba",
+            "BFP Calamba",
+            "CMC Calamba",
+            "Pama na Calamba",
+            "Calamba Doctors",
+            "JP Hospital"
+        )
 
-        val PMCCalamba: CardView = view.findViewById(R.id.pamanacalamba)
-        PMCCalamba.setOnClickListener {
-            // Replace with another fragment, e.g., ExampleFragment
-            replaceFragment(PMCFragment())
-        }
+        // Search filter functionality
+        etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-        val CalambaDoctors: CardView = view.findViewById(R.id.calambadoctors)
-        CalambaDoctors.setOnClickListener {
-            // Replace with another fragment, e.g., ExampleFragment
-            replaceFragment(CalambaDoctorsFragment())
-        }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val searchText = s.toString().lowercase()
+                for (i in hotlines.indices) {
+                    val hotline = hotlines[i]
+                    if (hotlineNames[i].lowercase().contains(searchText)) {
+                        hotline.visibility = View.VISIBLE
+                    } else {
+                        hotline.visibility = View.GONE
+                    }
+                }
+            }
 
-        val JPHospital: CardView = view.findViewById(R.id.jpcalamba)
-        JPHospital.setOnClickListener {
-            // Replace with another fragment, e.g., ExampleFragment
-            replaceFragment(JPHospitalFragment())
-        }
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
+        // Set click listeners for each hotline
+        hotlines[0].setOnClickListener { replaceFragment(PNPCalambaFragment()) }
+        hotlines[1].setOnClickListener { replaceFragment(BFPCalambaFragment()) }
+        hotlines[2].setOnClickListener { replaceFragment(CMCFragment()) }
+        hotlines[3].setOnClickListener { replaceFragment(PMCFragment()) }
+        hotlines[4].setOnClickListener { replaceFragment(CalambaDoctorsFragment()) }
+        hotlines[5].setOnClickListener { replaceFragment(JPHospitalFragment()) }
 
         return view
     }

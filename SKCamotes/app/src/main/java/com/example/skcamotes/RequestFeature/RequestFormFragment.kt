@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import java.text.SimpleDateFormat
 import java.util.*
 
 class RequestFormFragment : Fragment() {
@@ -31,6 +33,8 @@ class RequestFormFragment : Fragment() {
     private lateinit var etDescription: EditText
     private var selectedDrawable: Int? = null
     private lateinit var database: DatabaseReference
+    private val calendar = Calendar.getInstance()
+    private val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.US)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,10 +51,16 @@ class RequestFormFragment : Fragment() {
         etQuantity = view.findViewById(R.id.etQuantity)
         etFullName = view.findViewById(R.id.etFullName)
         etDescription = view.findViewById(R.id.etDescription)
+        val icBack = view.findViewById<ImageButton>(R.id.ic_back) // Initialize ic_back ImageButton
 
         // Initialize Firebase Database reference
         database = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app")
             .getReference("UserRequestedEquipments")
+
+        // Set click listener for back button
+        icBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
 
         // Retrieve arguments
         val itemName = arguments?.getString("item_name")
@@ -60,13 +70,50 @@ class RequestFormFragment : Fragment() {
         etNameOfItem.text = itemName
 
         // Set up date and time pickers
-        etSelectDate.setOnClickListener { showDatePicker() }
+        etSelectDate.setOnClickListener {
+            showDateRangePicker()
+        }
         etSelectTime.setOnClickListener { showTimePicker() }
 
         // Submit button click listener
         btnSubmitForm.setOnClickListener { fetchUserAndSaveDataToFirebase() }
 
         return view
+    }
+
+    private fun showDateRangePicker() {
+        val startCalendar = Calendar.getInstance()
+
+        // First DatePicker (Start Date)
+        val startDatePicker = DatePickerDialog(
+            requireContext(),
+            { _, startYear, startMonth, startDay ->
+                startCalendar.set(startYear, startMonth, startDay)
+                val startDate = dateFormat.format(startCalendar.time)
+
+                // Second DatePicker (End Date)
+                val endDatePicker = DatePickerDialog(
+                    requireContext(),
+                    { _, endYear, endMonth, endDay ->
+                        val endCalendar = Calendar.getInstance()
+                        endCalendar.set(endYear, endMonth, endDay)
+                        val endDate = dateFormat.format(endCalendar.time)
+
+                        // Set the selected date range in EditText
+                        etSelectDate.setText("$startDate - $endDate")
+                    },
+                    startYear,
+                    startMonth,
+                    startDay
+                )
+                endDatePicker.datePicker.minDate = startCalendar.timeInMillis
+                endDatePicker.show()
+            },
+            startCalendar.get(Calendar.YEAR),
+            startCalendar.get(Calendar.MONTH),
+            startCalendar.get(Calendar.DAY_OF_MONTH)
+        )
+        startDatePicker.show()
     }
 
     private fun fetchUserAndSaveDataToFirebase() {

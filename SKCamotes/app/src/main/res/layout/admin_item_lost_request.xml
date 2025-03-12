@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:orientation="vertical">
+
+        <!-- Row for Image and Name -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- User Icon -->
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/profile_icon"
+                android:layout_marginEnd="8dp" />
+
+            <!-- User Name -->
+            <TextView
+                android:id="@+id/txtUserEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ethan Gabriel Rolloque"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#444" />
+        </LinearLayout>
+
+        <!-- Item Name -->
+        <TextView
+            android:id="@+id/txtItemName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Item Name:  Chalk"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="#666"
+            android:layout_marginTop="8dp" />
+
+        <!-- Quantity -->
+        <TextView
+            android:id="@+id/txtQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quantity: 100"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#666"
+            android:layout_marginTop="2dp" />
+
+        <!-- Date -->
+        <TextView
+            android:id="@+id/txtSelectedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date: January 12, 2025"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#666"
+            android:layout_marginTop="2dp" />
+
+        <!-- Time -->
+        <TextView
+            android:id="@+id/txtSelectedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time: 10:05am"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#666"
+            android:layout_marginTop="2dp" />
+
+        <TextView
+            android:id="@+id/txtReturned"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status: Item Lost"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#666"
+            android:layout_marginTop="2dp" />
+
+        <Button
+            android:id="@+id/btnReturned"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Returned"
+            android:background="#1A2C28"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"/>
+
+        <Button
+            android:id="@+id/btnLost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lost"
+            android:background="#B71A1D"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            android:layout_marginTop="4dp"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

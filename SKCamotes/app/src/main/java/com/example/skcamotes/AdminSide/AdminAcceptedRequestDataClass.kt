@@ -1,6 +1,6 @@
-package com.example.skcamotes.RequestFeature
+package com.example.skcamotes.AdminSide
 
-data class UserRequestsDataClass(
+data class AdminAcceptedRequestDataClass(
     val userEmail: String = "",
     val itemName: String = "",
     val quantity: String = "", // Updated to String

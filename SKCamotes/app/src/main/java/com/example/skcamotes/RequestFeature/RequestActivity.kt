@@ -2,6 +2,7 @@ package com.example.skcamotes.RequestFeature
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
@@ -10,18 +11,22 @@ import com.example.skcamotes.Adapters.RequestPagerAdapter
 
 class RequestActivity : AppCompatActivity() {
 
+    private lateinit var backButton: ImageButton
     private lateinit var pendingTab: TextView
     private lateinit var acceptedTab: TextView
     private lateinit var rejectedTab: TextView
+    private lateinit var tabIndicator: View
     private lateinit var viewPager: ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_request)
 
+        backButton = findViewById(R.id.back_button)
         pendingTab = findViewById(R.id.tab_pending)
         acceptedTab = findViewById(R.id.tab_accepted)
         rejectedTab = findViewById(R.id.tab_rejected)
+        tabIndicator = findViewById(R.id.tab_indicator)
         viewPager = findViewById(R.id.view_pager)
 
         val adapter = RequestPagerAdapter(supportFragmentManager)
@@ -32,23 +37,25 @@ class RequestActivity : AppCompatActivity() {
         viewPager.adapter = adapter
 
         setupTabListeners()
-        updateTabUI(0) // Set the default selected tab to "Pending"
+        updateTabUI(0) // Default to Pending Tab
+
+        // Back button functionality
+        backButton.setOnClickListener {
+            finish() // Closes the activity
+        }
     }
 
     private fun setupTabListeners() {
         pendingTab.setOnClickListener {
             viewPager.currentItem = 0
-            updateTabUI(0)
         }
 
         acceptedTab.setOnClickListener {
             viewPager.currentItem = 1
-            updateTabUI(1)
         }
 
         rejectedTab.setOnClickListener {
             viewPager.currentItem = 2
-            updateTabUI(2)
         }
 
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
@@ -64,29 +71,34 @@ class RequestActivity : AppCompatActivity() {
         resetTabStyles()
 
         when (selectedTab) {
-            0 -> {
-                pendingTab.setBackgroundResource(R.drawable.selected_tab_background)
-                pendingTab.setTextColor(getColor(R.color.white))
-            }
-            1 -> {
-                acceptedTab.setBackgroundResource(R.drawable.selected_tab_background)
-                acceptedTab.setTextColor(getColor(R.color.white))
-            }
-            2 -> {
-                rejectedTab.setBackgroundResource(R.drawable.selected_tab_background)
-                rejectedTab.setTextColor(getColor(R.color.white))
-            }
+            0 -> highlightTab(pendingTab)
+            1 -> highlightTab(acceptedTab)
+            2 -> highlightTab(rejectedTab)
         }
+
+        animateIndicator(selectedTab)
     }
 
     private fun resetTabStyles() {
         val defaultTextColor = getColor(R.color.white)
-        pendingTab.setBackgroundResource(0)
-        acceptedTab.setBackgroundResource(0)
-        rejectedTab.setBackgroundResource(0)
 
         pendingTab.setTextColor(defaultTextColor)
         acceptedTab.setTextColor(defaultTextColor)
         rejectedTab.setTextColor(defaultTextColor)
+    }
+
+    private fun highlightTab(selectedTab: TextView) {
+        selectedTab.setTextColor(getColor(R.color.white))
+    }
+
+    private fun animateIndicator(position: Int) {
+        val indicatorTranslation = when (position) {
+            0 -> pendingTab.x
+            1 -> acceptedTab.x
+            2 -> rejectedTab.x
+            else -> pendingTab.x
+        }
+
+        tabIndicator.animate().x(indicatorTranslation).setDuration(200).start()
     }
 }

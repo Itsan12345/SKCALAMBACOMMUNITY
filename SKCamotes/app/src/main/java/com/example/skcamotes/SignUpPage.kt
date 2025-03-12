@@ -1,5 +1,6 @@
 package com.example.skcamotes
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -8,12 +9,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 
 class SignUpPage : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private val ADMIN_EMAIL = "calambacommunity@gmail.com"
+    private val databaseRef = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/").reference.child("Users")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,11 +53,9 @@ class SignUpPage : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    sendEmailVerification() // Send email verification after account creation
-                    saveUserToDatabase(name, phone, email)
-                    Toast.makeText(this, "Signup successful! Please check your email for verification.", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, LoginPage::class.java))
-                    finish()
+                    val userId = auth.currentUser!!.uid
+                    sendEmailVerification()
+                    saveUserToDatabase(userId, name, phone, email)
                 } else {
                     Toast.makeText(this, "Signup failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
@@ -74,23 +74,75 @@ class SignUpPage : AppCompatActivity() {
             }
     }
 
-    private fun saveUserToDatabase(name: String, phone: String, email: String) {
-        val database = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/").reference.child("Users")
+    private fun saveUserToDatabase(userId: String, name: String, phone: String, email: String) {
         val userRole = if (email == ADMIN_EMAIL) "admin" else "user"
 
         val userData = mapOf(
             "name" to name,
             "phone" to phone,
             "email" to email,
-            "role" to userRole
+            "role" to userRole,
+            "accepted_terms" to false // Default to false
         )
 
-        database.child(auth.currentUser!!.uid).setValue(userData)
+        databaseRef.child(userId).setValue(userData)
             .addOnSuccessListener {
-                Toast.makeText(this, "User saved successfully", Toast.LENGTH_SHORT).show()
+                checkTermsAndConditions(userId)
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Failed to save user: ${it.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun checkTermsAndConditions(userId: String) {
+        val userRef = databaseRef.child(userId).child("accepted_terms")
+
+        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val hasAcceptedTerms = snapshot.getValue(Boolean::class.java) ?: false
+                if (!hasAcceptedTerms) {
+                    showTermsAndConditionsDialog(userId)
+                } else {
+                    redirectToHome()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@SignUpPage, "Error checking terms & conditions", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun showTermsAndConditionsDialog(userId: String) {
+        val dialogBuilder = AlertDialog.Builder(this)
+        dialogBuilder.setTitle("Terms & Conditions")
+        dialogBuilder.setMessage(
+            "By using our services, you agree that if any equipment you requested is lost, " +
+                    "you are obliged to pay for its replacement.\n\n" +
+                    "Do you accept these terms?"
+        )
+        dialogBuilder.setPositiveButton("Accept") { _, _ ->
+            databaseRef.child(userId).child("accepted_terms").setValue(true)
+                .addOnSuccessListener {
+                    redirectToHome()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Failed to accept terms. Try again.", Toast.LENGTH_SHORT).show()
+                }
+        }
+        dialogBuilder.setNegativeButton("Decline") { _, _ ->
+            auth.signOut()
+            Toast.makeText(this, "You must accept the terms to use this app.", Toast.LENGTH_SHORT).show()
+        }
+
+        val dialog = dialogBuilder.create()
+        dialog.setCancelable(false)
+        dialog.show()
+    }
+
+    private fun redirectToHome() {
+        Toast.makeText(this, "Welcome!", Toast.LENGTH_SHORT).show()
+        startActivity(Intent(this, LoginPage::class.java))
+        finish()
     }
 }
