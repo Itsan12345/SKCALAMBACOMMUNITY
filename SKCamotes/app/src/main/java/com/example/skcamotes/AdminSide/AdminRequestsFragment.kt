@@ -51,20 +51,46 @@ class AdminRequestsFragment : Fragment() {
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 userList.clear()
+                val tempUserList = mutableListOf<AdminRequestDataClass>()
+                val userRequestsRef = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                    .getReference("UserRequestedEquipments")
+
+                // Fetch all users
                 for (userSnapshot in snapshot.children) {
                     val user = userSnapshot.getValue(AdminRequestDataClass::class.java)
                     if (user != null && user.name.isNotBlank() && user.email.isNotBlank() && user.phone.isNotBlank()) {
-                        userList.add(user)
+                        tempUserList.add(user)
                     }
                 }
-                adapter.notifyDataSetChanged()
+
+                // Check if each user has a request
+                userRequestsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(requestSnapshot: DataSnapshot) {
+                        for (user in tempUserList) {
+                            var hasRequest = false
+                            for (request in requestSnapshot.children) {
+                                val requestEmail = request.child("userEmail").getValue(String::class.java)
+                                if (requestEmail == user.email) {
+                                    hasRequest = true
+                                    break
+                                }
+                            }
+                            user.hasNewRequest = hasRequest
+                        }
+
+                        userList.clear()
+                        userList.addAll(tempUserList)
+                        adapter.notifyDataSetChanged()
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {}
+                })
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                // Handle error
-            }
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
+
 
     private fun showRequestedEquipmentDialog(user: AdminRequestDataClass) {
         val userEquipmentsRef = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/")
@@ -99,8 +125,8 @@ class AdminRequestsFragment : Fragment() {
         view.findViewById<TextView>(R.id.tvFullName).text = equipment.fullName ?: "N/A"
         view.findViewById<TextView>(R.id.tvDescription).text = equipment.description ?: "N/A"
         view.findViewById<TextView>(R.id.tvPhoneNumber).text = equipment.phoneNumber ?: "N/A"
-        view.findViewById<TextView>(R.id.tvDateTime).text =
-            "${equipment.selectedDate ?: "N/A"} ${equipment.selectedTime ?: "N/A"}"
+        view.findViewById<TextView>(R.id.tvDate).text = "${equipment.selectedDate ?: "N/A"}"
+        view.findViewById<TextView>(R.id.tvTime).text = "${equipment.selectedTime ?: "N/A"}"
 
         view.findViewById<Button>(R.id.btnAccept).setOnClickListener {
             acceptEquipmentRequest(equipment, user)
@@ -164,17 +190,53 @@ class AdminRequestsFragment : Fragment() {
     }
 
     private fun rejectEquipmentRequest(equipment: UserRequestedEquipment, user: AdminRequestDataClass) {
-        val rejectedRequestsRef = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/")
-            .getReference("RejectedRequests")
+        val rejectionReasons = arrayOf("Out of Stock", "Invalid Description", "Other")
+        var selectedReason = rejectionReasons[0]
 
-        rejectedRequestsRef.push().setValue(equipment)
-            .addOnSuccessListener {
-                removeRequestFromDatabase(equipment)
-                showSuccessDialog("Equipment request rejected successfully.")
-            }
-            .addOnFailureListener {
-                showErrorDialog("Failed to reject the equipment request. Please try again.")
-            }
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Select Rejection Reason")
+        builder.setSingleChoiceItems(rejectionReasons, 0) { _, which ->
+            selectedReason = rejectionReasons[which]
+        }
+
+        builder.setPositiveButton("Reject") { _, _ ->
+            val rejectedRequestsRef = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getReference("RejectedRequests")
+
+            rejectedRequestsRef.push().setValue(equipment)
+                .addOnSuccessListener {
+                    removeRequestFromDatabase(equipment)
+                    sendRejectionEmail(user.email, equipment.itemName, selectedReason)
+                    showSuccessDialog("Equipment request rejected successfully, and an email has been sent to ${user.email}.")
+                }
+                .addOnFailureListener {
+                    showErrorDialog("Failed to reject the equipment request. Please try again.")
+                }
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.create().show()
+    }
+
+    private fun sendRejectionEmail(userEmail: String, itemName: String, reason: String) {
+        val subject = "Your Equipment Request Has Been Rejected"
+        val message = "Hello,\n\nYour request for the equipment '$itemName' has been rejected due to the following reason: $reason.\n\nIf you have any questions, please contact us.\n\nThank you."
+
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "message/rfc822"
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(userEmail))
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+            putExtra(Intent.EXTRA_TEXT, message)
+        }
+
+        try {
+            startActivity(Intent.createChooser(intent, "Send Email"))
+        } catch (e: Exception) {
+            showErrorDialog("No email app found. Please install an email client.")
+        }
     }
 
     private fun removeRequestFromDatabase(equipment: UserRequestedEquipment) {

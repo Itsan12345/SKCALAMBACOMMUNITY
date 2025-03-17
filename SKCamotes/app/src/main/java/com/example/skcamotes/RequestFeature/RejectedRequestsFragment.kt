@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.skcamotes.Adapters.PendingRequestsAdapter
+import com.example.skcamotes.Adapters.RejectedRequestsAdapter
 import com.example.skcamotes.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -17,7 +18,7 @@ import com.google.firebase.database.*
 class RejectedRequestsFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: PendingRequestsAdapter
+    private lateinit var adapter: RejectedRequestsAdapter
     private lateinit var database: DatabaseReference
     private lateinit var emptyStateLayout: LinearLayout
     private val itemList = mutableListOf<UserRequestsDataClass>()
@@ -32,7 +33,7 @@ class RejectedRequestsFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerView_rejected_requests)
         emptyStateLayout = view.findViewById(R.id.emptyStateLayout)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = PendingRequestsAdapter(itemList)
+        adapter = RejectedRequestsAdapter(itemList)
         recyclerView.adapter = adapter
 
         val currentUser = auth.currentUser

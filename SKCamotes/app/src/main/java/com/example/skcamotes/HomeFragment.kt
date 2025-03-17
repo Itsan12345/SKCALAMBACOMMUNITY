@@ -28,6 +28,8 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
 import com.example.skcamotes.RequestFeature.RequestFragment
 
 class HomeFragment : Fragment() {
@@ -73,6 +75,15 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
+
+        // Find the bell_container FrameLayout
+        val bellContainer: ImageButton = view.findViewById(R.id.ic_Bell)
+
+        // Set click listener to navigate to NotificationActivity
+        bellContainer.setOnClickListener {
+            val intent = Intent(requireContext(), NotificationActivity::class.java)
+            startActivity(intent)
+        }
 
         searchEditText = view.findViewById(R.id.et_search)
 
@@ -283,6 +294,24 @@ class HomeFragment : Fragment() {
             val layoutParams = tab.layoutParams as ViewGroup.MarginLayoutParams
             layoutParams.setMargins(16, 0, 16, 0) // Adjust margins to add gap
             tab.requestLayout()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkNotificationBadge()
+    }
+
+    private fun checkNotificationBadge() {
+        val sharedPref = requireContext().getSharedPreferences("NotificationPrefs", AppCompatActivity.MODE_PRIVATE)
+        val unreadCount = sharedPref.getInt("unread_count", 0)
+
+        val badge = view?.findViewById<View>(R.id.notification_badge_on_profile)
+
+        if (unreadCount > 0) {
+            badge?.visibility = View.VISIBLE
+        } else {
+            badge?.visibility = View.GONE
         }
     }
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.skcamotes.Adapters.AcceptedRequestsAdapter
 import com.example.skcamotes.Adapters.PendingRequestsAdapter
 import com.example.skcamotes.R
 import com.google.firebase.auth.FirebaseAuth
@@ -16,7 +17,7 @@ import com.google.firebase.database.*
 class AcceptedRequestsFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: PendingRequestsAdapter
+    private lateinit var adapter: AcceptedRequestsAdapter
     private lateinit var database: DatabaseReference
     private lateinit var emptyStateLayout: View
     private val itemList = mutableListOf<UserRequestsDataClass>()
@@ -31,7 +32,7 @@ class AcceptedRequestsFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerView_accepted_requests)
         emptyStateLayout = view.findViewById(R.id.emptyStateLayout) // Find the empty state layout
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = PendingRequestsAdapter(itemList)
+        adapter = AcceptedRequestsAdapter(itemList)
         recyclerView.adapter = adapter
 
         val currentUser = auth.currentUser

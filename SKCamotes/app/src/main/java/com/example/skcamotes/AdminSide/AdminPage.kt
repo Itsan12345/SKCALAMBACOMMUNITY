@@ -1,9 +1,12 @@
 package com.example.skcamotes.AdminSide
 
 import android.content.Intent
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -15,12 +18,21 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import com.example.skcamotes.R
 
 class AdminPage : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var databaseRequests: DatabaseReference
+    private lateinit var databaseReservations: DatabaseReference
+    private lateinit var navigationView: NavigationView
+    private lateinit var menu: Menu
+
+    private var requestCount = 0
+    private var reservationCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,23 +42,90 @@ class AdminPage : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
         auth = FirebaseAuth.getInstance()
         googleSignInClient = GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN)
 
-        // Set up the toolbar
+        // Initialize Firebase Database
+        databaseRequests = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference("UserRequestedEquipments")
+
+        databaseReservations = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference("reservationreceipt")
+
+        // Toolbar setup
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu) // Menu icon
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu)
 
-        // Initialize Drawer Layout and Navigation View
+        // Drawer layout & navigation view
         drawerLayout = findViewById(R.id.drawer_layout)
-        val navigationView = findViewById<NavigationView>(R.id.navigation_view)
+        navigationView = findViewById(R.id.navigation_view)
         navigationView.setNavigationItemSelectedListener(this)
 
-        // Load default fragment (Users)
+        // Access navigation menu
+        menu = navigationView.menu
+
+        // Fetch Badge Counts
+        fetchRequestsCount()
+        fetchReservationsCount()
+
+        // Load Default Fragment (Users)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, UsersFragment())
                 .commit()
             navigationView.setCheckedItem(R.id.nav_users)
+        }
+    }
+
+    // Fetch Requests Count from Firebase
+    private fun fetchRequestsCount() {
+        databaseRequests.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                requestCount = snapshot.childrenCount.toInt()
+                showBadge(R.id.nav_requests, requestCount)
+                updateMenuIconBadge()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+
+    // Fetch Reservations Count from Firebase
+    private fun fetchReservationsCount() {
+        databaseReservations.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                reservationCount = snapshot.childrenCount.toInt()
+                showBadge(R.id.nav_reservations, reservationCount)
+                updateMenuIconBadge()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+
+    // Show Badge for Requests and Reservations in Side Menu
+    private fun showBadge(menuItemId: Int, count: Int) {
+        val menuItem = menu.findItem(menuItemId)
+        val actionView = menuItem.actionView
+        val badgeTextView = actionView?.findViewById<View>(R.id.badge_count) as? TextView
+
+        if (count > 0) {
+            badgeTextView?.visibility = View.VISIBLE
+            badgeTextView?.text = count.toString()
+        } else {
+            badgeTextView?.visibility = View.GONE
+        }
+    }
+
+    // Update Toolbar Icon (ic_menu) with Notification Badge
+    private fun updateMenuIconBadge() {
+        val shouldShowBadge = (requestCount > 0 || reservationCount > 0)
+
+        if (shouldShowBadge) {
+                supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu) // Replace with your custom ic_menu with badge
+        } else {
+            supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu)
         }
     }
 

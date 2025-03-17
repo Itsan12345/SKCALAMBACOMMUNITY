@@ -78,51 +78,42 @@ class AdminAcceptedRequestAdapter(private val requestList: MutableList<AdminAcce
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (requestSnapshot in snapshot.children) {
-                        val requestId = requestSnapshot.key ?: continue
+                        val dbRequest = requestSnapshot.getValue(AdminAcceptedRequestDataClass::class.java)
 
-                        // Move data to "ReturnedRequests"
-                        returnedRequestsRef.child(requestId).setValue(request)
-                            .addOnSuccessListener {
-                                // Delete from "AcceptedRequests"
-                                acceptedRequestsRef.child(requestId).removeValue()
-                                    .addOnSuccessListener {
-                                        Toast.makeText(
-                                            holder.itemView.context,
-                                            "Moved to ReturnedRequests",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                        // Ensure we're only moving the exact clicked request
+                        if (dbRequest != null && dbRequest.itemName == request.itemName &&
+                            dbRequest.quantity == request.quantity && dbRequest.selectedDate == request.selectedDate &&
+                            dbRequest.selectedTime == request.selectedTime) {
 
-                                        // Send a Thank You email
-                                        sendThankYouEmail(
-                                            holder.itemView.context,
-                                            request.userEmail,
-                                            request.itemName
-                                        )
-                                    }
-                                    .addOnFailureListener {
-                                        Toast.makeText(
-                                            holder.itemView.context,
-                                            "Failed to delete from AcceptedRequests",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                            }
-                            .addOnFailureListener {
-                                Toast.makeText(
-                                    holder.itemView.context,
-                                    "Failed to move data",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                            val requestId = requestSnapshot.key ?: continue
+
+                            // Move data to "ReturnedRequests"
+                            returnedRequestsRef.child(requestId).setValue(request)
+                                .addOnSuccessListener {
+                                    // Delete only the clicked request
+                                    requestSnapshot.ref.removeValue()
+                                        .addOnSuccessListener {
+                                            Toast.makeText(
+                                                holder.itemView.context,
+                                                "Moved to ReturnedRequests",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+
+                                            sendThankYouEmail(holder.itemView.context, request.userEmail, request.itemName)
+                                        }
+                                        .addOnFailureListener {
+                                            Toast.makeText(holder.itemView.context, "Failed to delete request", Toast.LENGTH_SHORT).show()
+                                        }
+                                }
+                                .addOnFailureListener {
+                                    Toast.makeText(holder.itemView.context, "Failed to move data", Toast.LENGTH_SHORT).show()
+                                }
+                        }
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(
-                        holder.itemView.context,
-                        "Database error: ${error.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(holder.itemView.context, "Database error: ${error.message}", Toast.LENGTH_SHORT).show()
                 }
             })
     }
@@ -152,51 +143,42 @@ class AdminAcceptedRequestAdapter(private val requestList: MutableList<AdminAcce
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (requestSnapshot in snapshot.children) {
-                        val requestId = requestSnapshot.key ?: continue
+                        val dbRequest = requestSnapshot.getValue(AdminAcceptedRequestDataClass::class.java)
 
-                        // Move data to "LostRequests"
-                        lostRequestsRef.child(requestId).setValue(request)
-                            .addOnSuccessListener {
-                                // Delete from "AcceptedRequests"
-                                acceptedRequestsRef.child(requestId).removeValue()
-                                    .addOnSuccessListener {
-                                        Toast.makeText(
-                                            holder.itemView.context,
-                                            "Moved to LostRequests",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                        // Ensure only the clicked request is moved
+                        if (dbRequest != null && dbRequest.itemName == request.itemName &&
+                            dbRequest.quantity == request.quantity && dbRequest.selectedDate == request.selectedDate &&
+                            dbRequest.selectedTime == request.selectedTime) {
 
-                                        // Send email notification about lost item payment
-                                        sendLostItemEmail(
-                                            holder.itemView.context,
-                                            request.userEmail,
-                                            request.itemName
-                                        )
-                                    }
-                                    .addOnFailureListener {
-                                        Toast.makeText(
-                                            holder.itemView.context,
-                                            "Failed to delete from AcceptedRequests",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                            }
-                            .addOnFailureListener {
-                                Toast.makeText(
-                                    holder.itemView.context,
-                                    "Failed to move data",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                            val requestId = requestSnapshot.key ?: continue
+
+                            // Move data to "LostRequests"
+                            lostRequestsRef.child(requestId).setValue(request)
+                                .addOnSuccessListener {
+                                    // Delete only the clicked request
+                                    requestSnapshot.ref.removeValue()
+                                        .addOnSuccessListener {
+                                            Toast.makeText(
+                                                holder.itemView.context,
+                                                "Moved to LostRequests",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+
+                                            sendLostItemEmail(holder.itemView.context, request.userEmail, request.itemName)
+                                        }
+                                        .addOnFailureListener {
+                                            Toast.makeText(holder.itemView.context, "Failed to delete request", Toast.LENGTH_SHORT).show()
+                                        }
+                                }
+                                .addOnFailureListener {
+                                    Toast.makeText(holder.itemView.context, "Failed to move data", Toast.LENGTH_SHORT).show()
+                                }
+                        }
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(
-                        holder.itemView.context,
-                        "Database error: ${error.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(holder.itemView.context, "Database error: ${error.message}", Toast.LENGTH_SHORT).show()
                 }
             })
     }

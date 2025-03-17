@@ -7,62 +7,81 @@
     app:cardCornerRadius="10dp"
     android:elevation="4dp">
 
-    <LinearLayout
+    <!-- Parent layout to allow badge positioning -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="148dp"
-        android:dividerPadding="8dp"
-        android:padding="10dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/txtName"
+        <!-- Main User Container -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Name"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:layout_height="148dp"
+            android:dividerPadding="8dp"
+            android:padding="10dp"
+            android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#D3D3D3" />
+            <TextView
+                android:id="@+id/txtName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Name"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/txtEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D3D3" />
+
+            <TextView
+                android:id="@+id/txtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Email"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D3D3" />
+
+            <TextView
+                android:id="@+id/txtPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Phone"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D3D3" />
+
+            <TextView
+                android:id="@+id/txtStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Status: Pending Request"
+                android:textSize="14sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <!-- Notification Badge Positioned at Top Right -->
+        <ImageView
+            android:id="@+id/notificationBadge"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="Email"
-            android:textSize="14sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#D3D3D3" />
-
-        <TextView
-            android:id="@+id/txtPhone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="Phone"
-            android:textSize="14sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#D3D3D3" />
-
-        <TextView
-            android:id="@+id/txtStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Status: Pending Request"
-            android:textSize="14sp"
-            android:textStyle="italic" />
-    </LinearLayout>
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_notification_badge"
+            android:background="@drawable/badge_background"
+            android:layout_gravity="top|end" />
+    </FrameLayout>
 </androidx.cardview.widget.CardView>

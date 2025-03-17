@@ -128,9 +128,62 @@
                 android:textColor="#979797"
                 android:textSize="15sp" />
 
-            <!-- Personal Information -->
+
             <LinearLayout
                 android:id="@+id/notifications_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <!-- Notification Icon -->
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_notification" />
+
+                <!-- Notification Text -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Notifications"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <!-- Badge Container -->
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <!-- Empty view to push the badge to the right -->
+                    <View
+                        android:layout_width="255dp"
+                        android:layout_height="22dp" />
+
+                    <!-- Badge -->
+                    <TextView
+                        android:id="@+id/notification_badge"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="end"
+                        android:background="@drawable/badge_background"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+                        android:gravity="center"
+                        android:visibility="visible"
+                        android:text="2" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+
+            <!-- Personal Information -->
+            <LinearLayout
+                android:id="@+id/pushnotifications_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
@@ -141,13 +194,13 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_notification" />
+                    android:src="@drawable/ic_notification_settings" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="Notifications"
+                    android:text="Notifications Settings"
                     android:textColor="#000000"
                     android:textSize="16sp" />
             </LinearLayout>

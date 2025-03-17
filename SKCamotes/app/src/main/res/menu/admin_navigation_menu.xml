@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/nav_users"
         android:title="Users"
@@ -11,7 +12,9 @@
     <item
         android:id="@+id/nav_requests"
         android:title="Requests"
-        android:icon="@drawable/requests_ic" />
+        android:icon="@drawable/requests_ic"
+        app:actionLayout="@layout/menu_badge"/>
+
     <item
         android:id="@+id/nav_requests_history"
         android:title="Requests History"
@@ -19,7 +22,8 @@
     <item
         android:id="@+id/nav_reservations"
         android:title="Reservations"
-        android:icon="@drawable/reservation_ic" />
+        android:icon="@drawable/reservation_ic"
+        app:actionLayout="@layout/menu_badge"/>
     <item
         android:id="@+id/nav_logout"
         android:title="Logout"

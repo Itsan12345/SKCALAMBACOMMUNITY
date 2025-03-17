@@ -2,53 +2,63 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/rejected_cardview_outline"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="12dp">
 
-        <!-- Full Name Label and Data -->
+        <!-- Profile and Name -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Full Name:"
-                android:textStyle="bold" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/profile_icon"
+                android:scaleType="centerCrop"
+                android:contentDescription="Profile Icon" />
+
             <TextView
                 android:id="@+id/textView_fullName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="John Doe"
+                android:text="Ethan Gabriel Rolloque"
+                android:textStyle="bold"
+                android:textSize="16sp"
                 android:layout_marginStart="8dp" />
         </LinearLayout>
 
-        <!-- Item Name Label and Data -->
+        <!-- Item Name -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Item Name:"
+                android:text="Item Name: "
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/textView_itemName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sample Item"
-                android:layout_marginStart="8dp" />
+                android:text="Stapler" />
         </LinearLayout>
 
-        <!-- Quantity Label and Data -->
+        <!-- Quantity -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,17 +67,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Quantity:"
+                android:text="Quantity: "
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/textView_quantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10"
-                android:layout_marginStart="8dp" />
+                android:text="2" />
         </LinearLayout>
 
-        <!-- Date Label and Data -->
+        <!-- Date -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -76,17 +86,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date:"
+                android:text="Date: "
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/textView_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2025-01-25"
-                android:layout_marginStart="8dp" />
+                android:text="February 5, 2025" />
         </LinearLayout>
 
-        <!-- Time Label and Data -->
+        <!-- Time -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,14 +105,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Time:"
+                android:text="Time: "
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/textView_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12:30 PM"
-                android:layout_marginStart="8dp" />
+                android:text="5:30pm" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

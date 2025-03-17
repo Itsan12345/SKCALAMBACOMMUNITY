@@ -19,10 +19,14 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.example.skcamotes.AdminSide.Announcement
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
 import com.google.firebase.messaging.FirebaseMessaging
+import org.json.JSONObject
 
 class AnnouncementsFragment : Fragment() {
 
@@ -30,6 +34,7 @@ class AnnouncementsFragment : Fragment() {
     private lateinit var adapter: AnnouncementsAdapter
     private lateinit var databaseReference: DatabaseReference
     private lateinit var fabAddAnnouncement: FloatingActionButton
+    private lateinit var notificationsRef: DatabaseReference
 
     private val CHANNEL_ID = "announcement_channel"
     private val NOTIFICATION_ID = 1
@@ -101,16 +106,58 @@ class AnnouncementsFragment : Fragment() {
             "timestamp" to System.currentTimeMillis()
         )
 
-        // Push announcement to Firebase
         val newAnnouncementRef = databaseReference.push()
         newAnnouncementRef.setValue(announcementData)
             .addOnSuccessListener {
                 Toast.makeText(context, "Announcement posted successfully", Toast.LENGTH_SHORT).show()
-                showLocalNotification(title, content)
+                showLocalNotification("The Admin has posted a new Announcement!!")
+                sendPushNotification("The Admin has posted a new Announcement!!")
+                pushNotificationToFirebase() // Push to the notifications node
             }
             .addOnFailureListener {
                 Toast.makeText(context, "Failed to post announcement", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun pushNotificationToFirebase() {
+        notificationsRef = FirebaseDatabase.getInstance("https://calambacommunity-default-rtdb.asia-southeast1.firebasedatabase.app/")
+            .reference.child("notifications")
+        val notificationData = mapOf(
+            "message" to "The Admin has posted a new Announcement!!",
+            "timestamp" to System.currentTimeMillis()
+        )
+
+        notificationsRef.push().setValue(notificationData)
+    }
+
+    private fun sendPushNotification(message: String) {
+        val url = "https://calambacommunity.scarlet2.io/send_notification.php"
+
+        val requestBody = JSONObject().apply {
+            put("title", "New Announcement")
+            put("message", message)
+            put("topic", "announcements")
+        }
+
+        val request = object : StringRequest(
+            Method.POST, url,
+            Response.Listener { response ->
+                Toast.makeText(context, "Notification Sent to All Users", Toast.LENGTH_SHORT).show()
+            },
+            Response.ErrorListener { error ->
+                Toast.makeText(context, "Failed to send notification: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        ) {
+            override fun getBody(): ByteArray {
+                return requestBody.toString().toByteArray(Charsets.UTF_8)
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/json; charset=utf-8"
+            }
+        }
+
+        Volley.newRequestQueue(context).add(request)
     }
 
     private fun showAddAnnouncementDialog() {
@@ -134,7 +181,7 @@ class AnnouncementsFragment : Fragment() {
             .show()
     }
 
-    private fun showLocalNotification(title: String, content: String) {
+    private fun showLocalNotification(content: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(
                     requireContext(),
@@ -148,28 +195,13 @@ class AnnouncementsFragment : Fragment() {
 
         val notificationBuilder = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle(title)
+            .setContentTitle("New Announcement")
             .setContentText(content)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(requireContext())) {
             notify(NOTIFICATION_ID, notificationBuilder.build())
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == NOTIFICATION_PERMISSION_REQUEST_CODE) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                Toast.makeText(context, "Notification permission granted", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(context, "Notification permission denied", Toast.LENGTH_SHORT).show()
-            }
         }
     }
 

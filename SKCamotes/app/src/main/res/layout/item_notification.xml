@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@drawable/notification_background">
+
+    <TextView
+        android:id="@+id/notification_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Announcement!!"
+        android:textColor="#B71A1D"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/notification_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Meter reading for room 1 has been updated."
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"
+        android:textColor="#404040" />
+
+    <TextView
+        android:id="@+id/notification_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="06 Mar 2025"
+        android:textSize="12sp"
+        android:textColor="#A0A0A0"
+        android:layout_marginTop="8dp" />
+</LinearLayout>

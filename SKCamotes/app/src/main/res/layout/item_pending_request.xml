@@ -25,7 +25,6 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/profile_icon"
-                android:background="@drawable/circle_background"
                 android:scaleType="centerCrop"
                 android:contentDescription="Profile Icon" />
 

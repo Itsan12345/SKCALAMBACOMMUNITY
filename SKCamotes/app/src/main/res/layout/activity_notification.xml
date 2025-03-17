@@ -3,50 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
     <!-- Title for the page -->
 
     <!-- Label for the switch -->
 
-    <TextView
-        android:id="@+id/notifications_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Push Notifications"
-        android:fontFamily="@font/archivo_bold"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notification_label" />
-
-    <TextView
-        android:id="@+id/notify_mobile_device_label"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Notify my mobile device"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/notifications_label"
-        app:layout_constraintBottom_toBottomOf="@id/switch_notifications"
-        app:layout_constraintEnd_toStartOf="@+id/switch_notifications"
-        app:layout_constraintHorizontal_bias="0" />
-
     <!-- Switch for enabling notifications -->
-    <Switch
-        android:id="@+id/switch_notifications"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/notifications_label" />
 
     <ImageView
         android:id="@+id/btn_back"
         android:layout_width="33dp"
         android:layout_height="28dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_back" />
@@ -55,14 +25,30 @@
         android:id="@+id/notification_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/archivo_bold"
         android:text="Notifications"
         android:textColor="#000000"
-        android:fontFamily="@font/archivo_bold"
         android:textSize="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.457"
         app:layout_constraintStart_toEndOf="@+id/btn_back"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="656dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notification_label">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewNotifications"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="1dp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,9 +27,15 @@ class AdminRequestsAdapter(
         holder.binding.txtEmail.text = user.email
         holder.binding.txtPhone.text = user.phone
 
-        // Set up the click listener for the CardView
+        // Show notification badge if there's a new request
+        if (user.hasNewRequest) {
+            holder.binding.notificationBadge.visibility = View.VISIBLE
+        } else {
+            holder.binding.notificationBadge.visibility = View.GONE
+        }
+
         holder.itemView.setOnClickListener {
-            onCardClick(user) // Trigger the lambda on click
+            onCardClick(user)
         }
     }
 
