@@ -80,17 +80,6 @@
                 android:layout_margin="10dp" />
 
             <!-- Price Section -->
-            <TextView
-                android:id="@+id/thirdfloor_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Price: ₱300/hr"
-                android:textSize="18sp"
-                android:textColor="#FF5722"
-                android:fontFamily="sans-serif-medium"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="10dp"
-                android:layout_margin="10dp" />
 
             <!-- Location Label -->
             <TextView

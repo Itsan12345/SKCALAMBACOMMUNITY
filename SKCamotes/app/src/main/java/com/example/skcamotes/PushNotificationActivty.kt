@@ -1,5 +1,6 @@
 package com.example.skcamotes
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.CompoundButton
@@ -7,47 +8,29 @@ import android.widget.ImageView
 import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.messaging.FirebaseMessaging
 
 class PushNotificationActivty : AppCompatActivity() {
 
-
-
     private lateinit var notificationSwitch: Switch
     private val TAG = "NotificationActivity"
+    private lateinit var sharedPrefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_push_notification)
 
-
         notificationSwitch = findViewById(R.id.switch_notifications)
         val backButton = findViewById<ImageView>(R.id.btn_back)
+        sharedPrefs = getSharedPreferences("NotificationPrefs", MODE_PRIVATE)
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                return@addOnCompleteListener
-            }
-            val token = task.result
-            Log.d(TAG, "FCM Token: $token")
-            Toast.makeText(this, "Your FCM Token: $token", Toast.LENGTH_LONG).show()
-        }
+        // Generate a new FCM Token on login
+        generateNewFCMToken()
 
         backButton.setOnClickListener {
             finish()
         }
 
-
-        val sharedPrefs = getSharedPreferences("NotificationPrefs", MODE_PRIVATE)
         val isNotificationsEnabled = sharedPrefs.getBoolean("notifications_enabled", false)
         notificationSwitch.isChecked = isNotificationsEnabled
 
@@ -59,39 +42,39 @@ class PushNotificationActivty : AppCompatActivity() {
             if (isChecked) {
                 FirebaseMessaging.getInstance().subscribeToTopic("announcements")
                     .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(
-                                this,
-                                "Subscribed to notifications",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            Toast.makeText(
-                                this,
-                                "Subscription failed",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                        Toast.makeText(
+                            this,
+                            if (task.isSuccessful) "Subscribed to notifications" else "Subscription failed",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
             } else {
                 FirebaseMessaging.getInstance().unsubscribeFromTopic("announcements")
                     .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(
-                                this,
-                                "Unsubscribed from notifications",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            Toast.makeText(
-                                this,
-                                "Unsubscription failed",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                        Toast.makeText(
+                            this,
+                            if (task.isSuccessful) "Unsubscribed from notifications" else "Unsubscription failed",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
             }
         }
     }
 
+    private fun generateNewFCMToken() {
+        FirebaseMessaging.getInstance().deleteToken().addOnCompleteListener {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                    return@addOnCompleteListener
+                }
+                val newToken = task.result
+                Log.d(TAG, "New FCM Token: $newToken")
+                Toast.makeText(this, "New FCM Token: $newToken", Toast.LENGTH_LONG).show()
+
+                // Store new token in SharedPreferences
+                sharedPrefs.edit().putString("fcm_token", newToken).apply()
+            }
+        }
+    }
 }
