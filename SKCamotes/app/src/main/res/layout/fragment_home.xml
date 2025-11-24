@@ -8,279 +8,281 @@
     tools:context=".HomeFragment"
     xmlns:tools="http://schemas.android.com/tools">
 
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="718dp">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="718dp"
-        android:background="#ECEBEB"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="55dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout4"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:background="@drawable/sk_peeps"
+            android:layout_height="match_parent"
+            android:background="#ECEBEB"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:id="@+id/linearLayout_home"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout4"
                 android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:orientation="horizontal"
+                android:layout_height="170dp"
+                android:background="@drawable/sk_peeps"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/ic_logo"
-                    android:layout_width="49dp"
+                <LinearLayout
+                    android:id="@+id/linearLayout_home"
+                    android:layout_width="match_parent"
                     android:layout_height="42dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/sk_calamba_logo_no_bg2" />
-
-                <ImageView
-                    android:id="@+id/imageView6"
-                    android:layout_width="89dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/txt_calamba_community" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-                <FrameLayout
-                    android:id="@+id/bell_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp">
-
-                    <ImageButton
-                        android:id="@+id/ic_Bell"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@null"
-                        android:src="@drawable/ic_bell" />
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
-                        android:id="@+id/notification_badge_on_profile"
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
-                        android:background="@drawable/badge_background"
-                        android:text="0"
-                        android:textSize="10sp"
-                        android:textColor="@android:color/white"
-                        android:layout_gravity="top|end"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="8dp"
-                        android:gravity="center"
-                        android:visibility="gone" />
-                </FrameLayout>
+                        android:id="@+id/ic_logo"
+                        android:layout_width="49dp"
+                        android:layout_height="42dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/sk_calamba_logo_no_bg2" />
+
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="89dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/txt_calamba_community" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <FrameLayout
+                        android:id="@+id/bell_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp">
+
+                        <ImageButton
+                            android:id="@+id/ic_Bell"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@null"
+                            android:src="@drawable/ic_bell" />
+
+                        <ImageView
+                            android:id="@+id/notification_badge_on_profile"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_gravity="top|end"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/badge_background"
+                            android:gravity="center"
+                            android:text="0"
+                            android:textColor="@android:color/white"
+                            android:textSize="10sp"
+                            android:visibility="gone" />
+                    </FrameLayout>
 
 
+                    <ImageButton
+                        android:id="@+id/ic_Profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="10dp"
+                        android:background="?android:selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_profile" />
 
-                <ImageButton
-                    android:id="@+id/ic_Profile"
+                </LinearLayout>
+
+                <!-- Add TextView for the title -->
+                <TextView
+                    android:id="@+id/txt_welcome"
+                    android:layout_width="223dp"
+                    android:layout_height="54dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/inter_extrabold"
+                    android:text="Welcome to\nCalamba CommUnity!"
+                    android:textColor="#000000"
+                    android:textSize="20sp"
+                    android:textStyle="italic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/linearLayout_home" />
+
+                <!-- Add TextView for the tagline -->
+                <TextView
+                    android:id="@+id/txt_tagline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="10dp"
-                    android:background="?android:selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_profile" />
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="sans-serif"
+                    android:text="''Together We Thrive, United We Rise.''"
+                    android:textColor="#000000"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_welcome" />
 
-            </LinearLayout>
-
-            <!-- Add TextView for the title -->
-            <TextView
-                android:id="@+id/txt_welcome"
-                android:layout_width="223dp"
-                android:layout_height="54dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/inter_extrabold"
-                android:text="Welcome to\nCalamba CommUnity!"
-                android:textColor="#000000"
-                android:textSize="20sp"
-                android:textStyle="italic"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linearLayout_home" />
-
-            <!-- Add TextView for the tagline -->
-            <TextView
-                android:id="@+id/txt_tagline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp"
-                android:fontFamily="sans-serif"
-                android:text="''Together We Thrive, United We Rise.''"
-                android:textColor="#000000"
-                android:textSize="13sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_welcome" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+            <!-- Carousel ViewPager2 -->
 
-        <!-- Carousel ViewPager2 -->
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/carouselRecyclerView"
-            android:layout_width="0dp"
-            android:layout_height="250dp"
-            android:layout_marginTop="184dp"
-            android:background="#FFFFFF"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabDots"
-            android:layout_width="wrap_content"
-            android:layout_height="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/carouselRecyclerView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_search"
-            app:layout_constraintVertical_bias="0.925"
-            app:tabBackground="@drawable/selector_dot_tab"
-            app:tabGravity="center"
-            app:tabIndicatorHeight="0dp"
-            app:tabMode="fixed"
-            app:tabPaddingEnd="4dp"
-            app:tabPaddingStart="4dp"
-            app:tabRippleColor="@null"
-            app:tabSelectedTextColor="@android:color/transparent"
-            app:tabTextColor="@android:color/transparent"
-            tools:ignore="UseCompatLoadingForDrawables">
-
-            <!-- Adding the dot size dynamically using drawable -->
-        </com.google.android.material.tabs.TabLayout>
-
-        <ImageButton
-            android:id="@+id/btnLeftArrow"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="10dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/left_arrow"
-            android:src="@drawable/ic_left_arrow"
-            app:layout_constraintBottom_toBottomOf="@id/carouselRecyclerView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/carouselRecyclerView" />
-
-
-        <ImageButton
-            android:id="@+id/btnRightArrow"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="10dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/right_arrow"
-            android:src="@drawable/ic_right_arrow"
-            app:layout_constraintBottom_toBottomOf="@id/carouselRecyclerView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/carouselRecyclerView" />
-
-        <EditText
-            android:id="@+id/et_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="-15dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/search_edittext_background"
-            android:drawableStart="@drawable/ic_search"
-            android:drawablePadding="8dp"
-            android:hint="Search here..."
-            android:padding="10dp"
-            android:textColorHint="#B0A5A5"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="#FFFFFF"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/carouselRecyclerView">
-
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:src="@drawable/line_1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/imageView8"
-                android:layout_width="53dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="15dp"
-                android:src="@drawable/ic_announcement"
-                app:layout_constraintStart_toEndOf="@+id/imageView4"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView21"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="27dp"
-                android:text="Announcements"
-                android:textColor="#000000"
-                android:textSize="15sp"
-                app:layout_constraintStart_toEndOf="@+id/imageView8"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/imageView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:src="@drawable/line_2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/announcements_recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/carouselRecyclerView"
+                android:layout_width="0dp"
+                android:layout_height="250dp"
+                android:layout_marginTop="184dp"
+                android:background="#FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabDots"
+                android:layout_width="wrap_content"
+                android:layout_height="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/carouselRecyclerView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_search"
+                app:layout_constraintVertical_bias="0.925"
+                app:tabBackground="@drawable/selector_dot_tab"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp"
+                app:tabMode="fixed"
+                app:tabPaddingEnd="4dp"
+                app:tabPaddingStart="4dp"
+                app:tabRippleColor="@null"
+                app:tabSelectedTextColor="@android:color/transparent"
+                app:tabTextColor="@android:color/transparent"
+                tools:ignore="UseCompatLoadingForDrawables">
+
+                <!-- Adding the dot size dynamically using drawable -->
+            </com.google.android.material.tabs.TabLayout>
+
+            <ImageButton
+                android:id="@+id/btnLeftArrow"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/left_arrow"
+                android:src="@drawable/ic_left_arrow"
+                app:layout_constraintBottom_toBottomOf="@id/carouselRecyclerView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/carouselRecyclerView" />
 
 
+            <ImageButton
+                android:id="@+id/btnRightArrow"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="10dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/right_arrow"
+                android:src="@drawable/ic_right_arrow"
+                app:layout_constraintBottom_toBottomOf="@id/carouselRecyclerView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/carouselRecyclerView" />
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="-15dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/search_edittext_background"
+                android:drawableStart="@drawable/ic_search"
+                android:drawablePadding="8dp"
+                android:hint="Search here..."
+                android:padding="10dp"
+                android:textColorHint="#B0A5A5"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/carouselRecyclerView">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:src="@drawable/line_1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="53dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/ic_announcement"
+                    app:layout_constraintStart_toEndOf="@+id/imageView4"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="27dp"
+                    android:text="Announcements"
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toEndOf="@+id/imageView8"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:src="@drawable/line_2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/announcements_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
